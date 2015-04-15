@@ -14,7 +14,6 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public float stepDelay=1f;
 	public float delayWhileShooting=2f;
 	public Vector3 shootSignalVector=new Vector3(100f,100f,100f);
-	public Vector3 endQueSignal=new Vector3(200f,200f,200f);
 	public PlayerController playerControl;
 	public PlayerAttacks playerAttack; 
 	public int currentShotIterator=0;
@@ -31,6 +30,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public float energyAtQueStart;
 
 	void Start () {
+		currentEnergy=maxEnergy;
 		overlay=GameObject.Find("Overlay");
 		playerControl=GetComponent<PlayerController>();
 		playerAttack=GetComponent<PlayerAttacks>();
@@ -56,7 +56,6 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		}
 
 		if(Input.GetKeyDown(KeyCode.H) && queueing ){
-			//queuedStepList.Add(endQueSignal);
 			StopCoroutine("Queueing");
 			queueing=false;
 			StartCoroutine("PlaybackQue");
@@ -95,12 +94,13 @@ public class PlayerMoveQueueing: MonoBehaviour {
 				currentEnergy-=shotEnergyDepletionRate;
 
 				Vector3 targetPos=cursorRayHit.point;
-				targetPos.y=0f;
+				targetPos.y=transform.position.y;
 				shotTargets.Add(targetPos);
 
 				GameObject line= Instantiate(lineObject,transform.position,Quaternion.identity) as GameObject;
+				Vector3 shotRangeForLineRenderer=(targetPos-transform.position).normalized*playerAttack.maxRange +transform.position;
 				line.GetComponent<LineRenderer>().SetPosition(0,transform.position);
-				line.GetComponent<LineRenderer>().SetPosition(1,targetPos);
+				line.GetComponent<LineRenderer>().SetPosition(1,shotRangeForLineRenderer);
 				placeholderLines.Add(line);
 			}
 		}
