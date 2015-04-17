@@ -1,10 +1,14 @@
 fileFormatVersion: 2
-guid: 9500f110945b1784ea67d62ccae9818d
-timeCreated: 1429122334
+guid: 2a65489d621311f46938ef8d87ccbe98
+timeCreated: 1429300941
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - floortile: {fileID: 166248, guid: 04e196c13e1c5714485ac269f27746c7, type: 2}
+  - walltile: {fileID: 151914, guid: a17101a214d91ea4b9e893c7d9f9cd1c, type: 2}
+  - outerWall: {fileID: 163546, guid: ee4ea2bca3e297648ab95bc5eca3d929, type: 2}
+  - spawner: {fileID: 193428, guid: f72c04d2f608c694d9cb29f46691bd16, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
