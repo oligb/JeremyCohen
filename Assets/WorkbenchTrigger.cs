@@ -5,6 +5,8 @@ public class WorkbenchTrigger : MonoBehaviour {
 	
 	public Vector3 startPosCam;
 	public Vector3 targetPosCam;
+	public Vector3 workbenchCamPos;
+	public Vector3 consoleCamPos;
 	public Vector3 startRotation;
 	public Vector3 targetRotation;
 	public float startFOV;
@@ -16,6 +18,7 @@ public class WorkbenchTrigger : MonoBehaviour {
 	public bool lerping=false;
 
 	void Start(){
+
 		startPosCam=Camera.main.transform.position;
 		player=GameObject.Find("Player").transform;
 	}
@@ -24,20 +27,35 @@ public class WorkbenchTrigger : MonoBehaviour {
 	}
 
 	
-	void OnTriggerEnter(){
+	void OnTriggerEnter(Collider col){
 		if(!onMenu && !lerping){
+			if(col.gameObject.name =="WorkbenchTrigger"){
+				targetPosCam=workbenchCamPos;
+			}
+			else{
+				targetPosCam=consoleCamPos;
+			}
+
 			lerping=true;
 			StartCoroutine("ZoomIn");
 		}
 	}	
-	void OnTriggerExit(){
+	void OnTriggerExit(Collider col){
 		if(onMenu && !lerping){
+			if(col.gameObject.name =="WorkbenchTrigger"){
+				targetPosCam=workbenchCamPos;
+			}
+			else{
+				targetPosCam=consoleCamPos;
+			}
+
 			lerping=true;
 			StartCoroutine("ZoomOut");
 		}
 	}
 
 	IEnumerator ZoomIn(){
+
 		player.GetComponent<PlayerController>().canMove=false;
 		player.GetComponent<PlayerController>().GetComponent<Rigidbody>().velocity*=.5f;
 		float i=0f;

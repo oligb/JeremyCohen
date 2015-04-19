@@ -8,6 +8,8 @@ public class DestroyAfterTime : MonoBehaviour {
 	public float lifeTime=5f;
 	public Vector3 startPos, endPos;
 	public float range;
+
+	public float shotDamage=5f;
 	void Start () {
 		startTime=Time.time;
 	}
@@ -22,5 +24,14 @@ public class DestroyAfterTime : MonoBehaviour {
 		if(Time.time-startTime>lifeTime){
 			Destroy(gameObject);
 	}
+	}
+
+	
+	void OnCollisionEnter(Collision col){
+		if(col.gameObject.GetComponent<TakeDamage>() != null){
+		col.gameObject.GetComponent<TakeDamage>().currentHealth-=shotDamage;	
+			col.gameObject.GetComponent<TakeDamage>().timeSinceDamage=0f;
+			Destroy(gameObject);
+		}
 	}
 }
