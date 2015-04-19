@@ -9,7 +9,9 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public List<GameObject> placeholderLines = new List<GameObject>();
 
 	public GameObject lineObject;
+	public GameObject trailHolder;
 	public GameObject overlay;
+	public GameObject ghostHolder;
 	public float stepSize=5f;
 	public float stepDelay=1f;
 	public float delayWhileShooting=2f;
@@ -34,6 +36,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		overlay=GameObject.Find("Overlay");
 		playerControl=GetComponent<PlayerController>();
 		playerAttack=GetComponent<PlayerAttacks>();
+
 	}
 	
 	// Update is called once per frame
@@ -42,6 +45,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 			overlay.gameObject.SetActive(true);
 		}
 		else{
+
 			overlay.gameObject.SetActive(false);
 		}	
 
@@ -81,14 +85,16 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 
 
-		if ((Input.GetMouseButtonDown(0) ||Input.GetKeyDown(KeyCode.P)) && queueing){
+		if ((Input.GetMouseButtonDown(0) ||Input.GetKeyDown(KeyCode.P)) && !playingBack){
+
+
 
 		Ray cursorRay= Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit cursorRayHit= new RaycastHit();
 
 		if(Physics.Raycast(cursorRay, out cursorRayHit, 1000f)){
 			
-
+				if(queueing){
 				queuedStepList.Add(transform.position);
 				queuedStepList.Add(shootSignalVector);
 				currentEnergy-=shotEnergyDepletionRate;
@@ -102,12 +108,25 @@ public class PlayerMoveQueueing: MonoBehaviour {
 				line.GetComponent<LineRenderer>().SetPosition(0,transform.position);
 				line.GetComponent<LineRenderer>().SetPosition(1,shotRangeForLineRenderer);
 				placeholderLines.Add(line);
+				}
+				else{
+					Vector3 targetPos=cursorRayHit.point;
+					targetPos.y=transform.position.y;
+					playerAttack.Shoot(transform.position,targetPos);
+				}
 			}
+
+
+		
 		}
 	}
 
 
 	public IEnumerator PlaybackQue(){
+		GameObject trailClone =GameObject.Find("trailHolder(Clone)");
+		trailClone.transform.parent=null; 
+		Destroy(GameObject.Find("GhostHolder(Clone)"));
+
 		playingBack=true;
 		StopCoroutine("Queueing");
 		GetComponent<PlayerController>().canMove=false;
@@ -130,6 +149,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 			}
 		}
 
+		Destroy(trailClone);
 		queuedStepList.Clear();
 		shotTargets.Clear();
 		placeholderLines.Clear();
@@ -141,6 +161,13 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	}
 
 	public IEnumerator Queueing(){
+		Mesh ghostMesh = GetComponent<MeshFilter>().mesh;
+		GameObject ghostInPlace = Instantiate(ghostHolder,transform.position,Quaternion.identity) as GameObject;
+		ghostInPlace.GetComponent<MeshFilter>().mesh=ghostMesh;
+		ghostInPlace.transform.localScale=transform.localScale;
+
+		GameObject trail= Instantiate(trailHolder,transform.position,Quaternion.identity) as GameObject;
+		trail.transform.parent=gameObject.transform;
 		queueing=true;
 		Vector3 lastQuePos=transform.position;
 		queuedStepList.Add(lastQuePos);
