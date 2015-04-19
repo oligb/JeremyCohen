@@ -39,6 +39,7 @@ public class PlayerAttacks : MonoBehaviour {
 			bullet.transform.LookAt(targetPos);
 			bullet.transform.Rotate(0f,Random.Range(-shotArc/2,shotArc/2),0f);
 			bullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward*bulletSpeed*Random.Range(.8f,1.2f),ForceMode.Impulse);
+			bullet.GetComponent<DestroyAfterTime>().shotDamage=bulletDamage;
 			bullet.GetComponent<DestroyAfterTime>().startPos=playerPos;
 			bullet.GetComponent<DestroyAfterTime>().endPos=targetPos;
 			bullet.GetComponent<DestroyAfterTime>().range=maxRange;
