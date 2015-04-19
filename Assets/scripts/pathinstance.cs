@@ -27,6 +27,8 @@ public class pathinstance : MonoBehaviour {
 	int tileSize = 5;
 	int verticalTileCount, horizontalTileCount;
 
+	float rightTurnChance = 0f;
+
 	//positions
 	Vector3 activePathSpawnPosition, activeGridSpawnPosition;
 	bool turnBlock = false;
@@ -82,11 +84,11 @@ public class pathinstance : MonoBehaviour {
 
 			//turn block ensures the paths dont crash onthemselves.
 
-			if (randomNumber < 0.5f && turnBlock){
-				turnBlock  = !turnBlock;
+			if (randomNumber + rightTurnChance < 0.5f ){
+				rightTurnChance -= 0.005f;
 				tracer.transform.Rotate(0,90,0);
-			} else if ( randomNumber < 1f && !turnBlock){
-				turnBlock  = !turnBlock;
+			} else if ( randomNumber < 1f ){
+				rightTurnChance += 0.005f;
 				tracer.transform.Rotate(0,-90,0);
 			} 
 			tracer.transform.Translate(Vector3.forward * tileSize );
