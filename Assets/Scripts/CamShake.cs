@@ -40,7 +40,7 @@ public class CamShake : MonoBehaviour {
 			x *= magnitude * damper;
 			y *= magnitude * damper;
 			
-			transform.position = new Vector3(x, originalCamPos.y, y);
+			transform.position = new Vector3(originalCamPos.x+x, originalCamPos.y, originalCamPos.z+y);
 			
 			yield return null;
 		}

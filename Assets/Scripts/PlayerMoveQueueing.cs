@@ -12,6 +12,8 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public GameObject trailHolder;
 	public GameObject overlay;
 	public GameObject ghostHolder;
+
+	public float shotArcToPredictorModifier=5f;
 	public float stepSize=5f;
 	public float stepDelay=1f;
 	public float delayWhileShooting=2f;
@@ -21,6 +23,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public int currentShotIterator=0;
 	public bool queueing=false;
 	public bool playingBack=false;
+	public bool stopEnemies=false;
 
 	public float maxEnergy=100f;
 	public float currentEnergy=100f;
@@ -32,15 +35,23 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public float energyAtQueStart;
 
 	void Start () {
-		currentEnergy=maxEnergy;
 		overlay=GameObject.Find("Overlay");
 		playerControl=GetComponent<PlayerController>();
 		playerAttack=GetComponent<PlayerAttacks>();
+	//	currentEnergy=maxEnergy;
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(queueing || playingBack){
+			stopEnemies=true;
+		}
+		else{
+			stopEnemies=false;
+		}
+
 		if(queueing){
 			overlay.gameObject.SetActive(true);
 		}
@@ -53,19 +64,24 @@ public class PlayerMoveQueueing: MonoBehaviour {
 			currentEnergy+=energyRechargeRate;
 		}
 
-		if(Input.GetKeyDown("space") && !queueing && !playingBack){
-			posAtQueStart=transform.position;
-			energyAtQueStart=currentEnergy;
-			StartCoroutine("Queueing");
-		}
-
-		if(Input.GetKeyDown(KeyCode.H) && queueing ){
+		
+		if(Input.GetKeyDown("space") && queueing ){
 			StopCoroutine("Queueing");
 			queueing=false;
 			StartCoroutine("PlaybackQue");
 		}
 
+		if(Input.GetKeyDown("space") && !queueing && !playingBack && currentEnergy>=0f){
+			posAtQueStart=transform.position;
+			energyAtQueStart=currentEnergy;
+			StartCoroutine("Queueing");
+		}
+
+
 		if(Input.GetKeyDown(KeyCode.Escape) && queueing ){
+			GameObject trailClone =GameObject.Find("trailHolder(Clone)");
+			Destroy(trailClone.gameObject);
+			Destroy(GameObject.Find("GhostHolder(Clone)"));
 
 			StopCoroutine("Queueing");
 			queuedStepList.Clear();
@@ -85,7 +101,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 
 
-		if ((Input.GetMouseButtonDown(0) ||Input.GetKeyDown(KeyCode.P)) && !playingBack){
+		if ((Input.GetMouseButtonDown(0) ||Input.GetKeyDown(KeyCode.P)) && !playingBack && queueing){
 
 
 
@@ -94,7 +110,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 		if(Physics.Raycast(cursorRay, out cursorRayHit, 1000f)){
 			
-				if(queueing){
+				if(queueing  && currentEnergy>=0f){
 				queuedStepList.Add(transform.position);
 				queuedStepList.Add(shootSignalVector);
 				currentEnergy-=shotEnergyDepletionRate;
@@ -105,14 +121,21 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 				GameObject line= Instantiate(lineObject,transform.position,Quaternion.identity) as GameObject;
 				Vector3 shotRangeForLineRenderer=(targetPos-transform.position).normalized*playerAttack.maxRange +transform.position;
-				line.GetComponent<LineRenderer>().SetPosition(0,transform.position);
-				line.GetComponent<LineRenderer>().SetPosition(1,shotRangeForLineRenderer);
+				LineRenderer shotPredictor = line.GetComponent<LineRenderer>();
+				shotPredictor.SetPosition(0,transform.position);
+				shotPredictor.SetPosition(1,shotRangeForLineRenderer);
+				float shotAngle=playerAttack.shotArc;
+				shotPredictor.SetWidth(.1f,shotAngle*shotArcToPredictorModifier);
 				placeholderLines.Add(line);
+
+
 				}
 				else{
+					if(currentEnergy>=0f){
 					Vector3 targetPos=cursorRayHit.point;
 					targetPos.y=transform.position.y;
 					playerAttack.Shoot(transform.position,targetPos);
+					}
 				}
 			}
 

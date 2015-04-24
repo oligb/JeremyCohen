@@ -5,8 +5,11 @@ public class EnergyManager : MonoBehaviour {
 
 	public GameObject player;
 	public float energy;
+	public float maxEnergy;
+	public Vector3 startScale;
 	// Use this for initialization
 	void Start () {
+		startScale=transform.localScale;
 		player=GameObject.Find("Player");
 	}
 	
@@ -14,7 +17,10 @@ public class EnergyManager : MonoBehaviour {
 	void Update () {
 
 		energy=player.GetComponent<PlayerMoveQueueing>().currentEnergy;
-		transform.localScale= new Vector3(energy/10f,1f,1f);
+		maxEnergy=player.GetComponent<PlayerMoveQueueing>().maxEnergy;
+
+		float barScaler=energy/maxEnergy;
+		transform.localScale= new Vector3(barScaler*startScale.x,startScale.y,startScale.z);
 	
 	}
 }

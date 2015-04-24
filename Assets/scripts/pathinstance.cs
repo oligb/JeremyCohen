@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class pathinstance : MonoBehaviour {
 
 	// A list for the gameObjects to reside so that the convex hull can be checked.
-	List<GameObject> convexHullList = new List<GameObject>();
+	public List<GameObject> convexHullList = new List<GameObject>();
 
 	// The game object variables.
 	public GameObject floortile, walltile, outerWall, spawner;
@@ -15,13 +15,18 @@ public class pathinstance : MonoBehaviour {
 	public int maximumPathCount = 3;
 	public float pathmakerChance = 0.01f;
 	public float wallMakerChance = 0.1f;
+	public int maxXTiles,minXTiles,maxYTiles,minYTiles;
+	public float enemySpawnChance = .05f;
+	public int enemyCount = 0;
+ 	public int maxEnemiesSpawned = 25;
 
+	public GameObject punchingBag;
 	// float to check what to instanciate
 	float randomNumber;
 
 	// to controll the size of the maze.
-	int currentPathLength;
-	int currentPathCount = 0;
+
+	 int currentPathLength,	 currentPathCount = 0;
 
 	// the constraints for the blocks themselves
 	int tileSize = 5;
@@ -40,8 +45,8 @@ public class pathinstance : MonoBehaviour {
 		GameObject currentObject;
 
 		 // I wanted the rooms to have varied sizes.
-		verticalTileCount =  Random.Range(4,8);
-		horizontalTileCount = Random.Range(4,8);
+		verticalTileCount =  Random.Range(minYTiles,maxYTiles);
+		horizontalTileCount = Random.Range(minXTiles,maxXTiles);
 
 		// We are using the grid/ path instanciator.
 		for (int x = 0; x < verticalTileCount; x++){
@@ -74,7 +79,8 @@ public class pathinstance : MonoBehaviour {
 		currentPathLength = 0;
 		GameObject currentObject;
 		Vector3 spawnerPosition = spawnPathPos;
-		GameObject tracer = Instantiate(spawner, spawnerPosition, gameObject.transform.rotation) as GameObject;
+		int direction = Random.Range(1,4);
+		GameObject tracer = Instantiate(spawner, spawnerPosition, Quaternion.Euler(0,90 * direction,0) ) as GameObject;
 		while (currentPathLength < maxPathLength){
 			randomNumber = Random.value;
 			
@@ -84,10 +90,12 @@ public class pathinstance : MonoBehaviour {
 
 			//turn block ensures the paths dont crash onthemselves.
 
-			if (randomNumber + rightTurnChance < 0.5f ){
+			if (randomNumber < 0.5f && turnBlock){
+				turnBlock = !turnBlock;
 				rightTurnChance -= 0.005f;
 				tracer.transform.Rotate(0,90,0);
-			} else if ( randomNumber < 1f ){
+			} else if ( randomNumber < 1f && !turnBlock ){
+				turnBlock = !turnBlock;
 				rightTurnChance += 0.005f;
 				tracer.transform.Rotate(0,-90,0);
 			} 
@@ -105,10 +113,20 @@ public class pathinstance : MonoBehaviour {
 
 				Vector3 position = new Vector3(x * tileSize, 0, z * tileSize) + spawnerPosition;
 				randomNumber = Random.value;
+
+
 				
 				if (randomNumber < 1.0f - wallMakerChance){
 					currentObject = Instantiate(floortile, position, Quaternion.Euler(0f,0f,0f)) as GameObject;
 					convexHullList.Add(currentObject);
+					if(randomNumber<enemySpawnChance){
+						if ( enemyCount < maxEnemiesSpawned ) {
+ 							GameObject enemyTest = Instantiate(punchingBag,position,Quaternion.identity) as GameObject;
+							enemyTest.transform.Translate(Vector3.up*2);
+							enemyCount += 1;
+						}
+
+					}
 
 				} else {
 					currentObject = Instantiate(walltile, position, Quaternion.Euler(0f,0f,0f)) as GameObject;
