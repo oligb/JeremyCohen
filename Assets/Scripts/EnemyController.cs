@@ -44,7 +44,7 @@ public class EnemyController : MonoBehaviour
 			    Physics.Raycast (transform.position, player.position - transform.position, out hit, visionDistance) && 
 			    hit.collider.gameObject.tag == "Player") {
 				canSeePlayer = true;
-			if(!player.GetComponent<PlayerMoveQueueing>().stopEnemies){
+			if(!player.GetComponent<PlayerMoveQueueing>().timeStopped){
 			transform.LookAt(player.position);
 			}
 				//lookAtPlayer ();
@@ -86,7 +86,7 @@ public class EnemyController : MonoBehaviour
 			turnAround = false;
 		} else {
 			doOnce = true;
-			if(!player.GetComponent<PlayerMoveQueueing>().stopEnemies){
+			if(!player.GetComponent<PlayerMoveQueueing>().timeStopped){
 			GetComponent<Rigidbody> ().velocity = transform.forward * speed;
 			}
 			else{
@@ -103,7 +103,7 @@ public class EnemyController : MonoBehaviour
 	
 	void chase ()
 	{
-		if(!player.GetComponent<PlayerMoveQueueing>().stopEnemies){
+		if(!player.GetComponent<PlayerMoveQueueing>().timeStopped){
 		transform.Translate (Vector3.forward * Time.deltaTime * speed);
 		}
 	}

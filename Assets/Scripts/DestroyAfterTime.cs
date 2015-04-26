@@ -28,9 +28,17 @@ public class DestroyAfterTime : MonoBehaviour {
 
 	
 	void OnCollisionEnter(Collision col){
-		if(col.gameObject.GetComponent<TakeDamage>() != null){
-		col.gameObject.GetComponent<TakeDamage>().currentHealth-=shotDamage;	
-			col.gameObject.GetComponent<TakeDamage>().timeSinceDamage=0f;
+
+		if(col.gameObject.GetComponent<DamagePlayer>() != null){
+			Destroy(col.gameObject);
+		}
+		else if(col.gameObject.GetComponent<TakeDamage>() !=null){
+			col.gameObject.GetComponent<TakeDamage>().KillEnemy();
+
+		}
+		else if(col.gameObject.GetComponent<PunchingBagDamage>() != null){
+			col.gameObject.GetComponent<PunchingBagDamage>().currentHealth-=shotDamage;	
+			col.gameObject.GetComponent<PunchingBagDamage>().timeSinceDamage=0f;
 			Destroy(gameObject);
 		}
 	}

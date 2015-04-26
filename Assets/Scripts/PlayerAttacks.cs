@@ -32,7 +32,7 @@ public class PlayerAttacks : MonoBehaviour {
 	public void Shoot(Vector3 playerPos, Vector3 targetPos){
 
 		//shake amt relative to player
-		//Camera.main.gameObject.GetComponent<CamShake>().TriggerShake();
+		Camera.main.gameObject.GetComponent<CamShake>().TriggerShake();
 		direction= targetPos-playerPos;
 		for(int i=0; i<numShots; i++){
 			GameObject bullet= Instantiate(bullet1, playerPos,Quaternion.identity) as GameObject;

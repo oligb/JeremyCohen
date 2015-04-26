@@ -87,7 +87,7 @@ public class PlayerUpgradeManager : MonoBehaviour {
 
 	public void SetTheStats(){
 		Debug.Log("setstats");
-		GetComponent<PlayerController>().moveSpeed=currentMoveSpeed;
+		GetComponent<PlayerController>().maxSpeed=currentMoveSpeed;
 		GetComponent<PlayerAttacks>().numShots=currentNumShots;
 		GetComponent<PlayerAttacks>().bulletDamage=currentShotDamage;
 		GetComponent<PlayerAttacks>().bulletSpeed=currentShotSpeed;

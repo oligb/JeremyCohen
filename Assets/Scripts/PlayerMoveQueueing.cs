@@ -23,7 +23,8 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public int currentShotIterator=0;
 	public bool queueing=false;
 	public bool playingBack=false;
-	public bool stopEnemies=false;
+
+	public bool timeStopped=false;
 
 	public float maxEnergy=100f;
 	public float currentEnergy=100f;
@@ -46,11 +47,12 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	void Update () {
 
 		if(queueing || playingBack){
-			stopEnemies=true;
+			timeStopped=true;
 		}
 		else{
-			stopEnemies=false;
+			timeStopped=false;
 		}
+
 
 		if(queueing){
 			overlay.gameObject.SetActive(true);
@@ -62,6 +64,9 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 		if(currentEnergy<maxEnergy && !queueing && !playingBack){
 			currentEnergy+=energyRechargeRate;
+		}
+		if(currentEnergy>maxEnergy){
+			currentEnergy=maxEnergy;
 		}
 
 		
@@ -149,7 +154,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		GameObject trailClone =GameObject.Find("trailHolder(Clone)");
 		trailClone.transform.parent=null; 
 		Destroy(GameObject.Find("GhostHolder(Clone)"));
-
+		GetComponent<Rigidbody>().velocity=Vector3.zero;
 		playingBack=true;
 		StopCoroutine("Queueing");
 		GetComponent<PlayerController>().canMove=false;
@@ -183,7 +188,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 	}
 
-	public IEnumerator Queueing(){
+	public IEnumerator Queueing(){	
 		Mesh ghostMesh = GetComponent<MeshFilter>().mesh;
 		GameObject ghostInPlace = Instantiate(ghostHolder,transform.position,Quaternion.identity) as GameObject;
 		ghostInPlace.GetComponent<MeshFilter>().mesh=ghostMesh;

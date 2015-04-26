@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyDamage : MonoBehaviour {
+public class PlayerHealthManager : MonoBehaviour {
 
 	// Use this for initialization
+	public float maxHealth=100f;
+	public float currentHealth=100f;
 	void Start () {
 	
 	}
