@@ -73,6 +73,7 @@ public class WorkbenchTrigger : MonoBehaviour {
 		lerping=false;
 		onMenu=true;
 		player.GetComponent<PlayerController>().canMove=true;
+		yield break;
 	}
 
 	IEnumerator ZoomOut(){
@@ -94,6 +95,7 @@ public class WorkbenchTrigger : MonoBehaviour {
 		lerping=false;
 		onMenu=false;
 		player.GetComponent<PlayerUpgradeManager>().SetTheStats();
+		yield break;
 	}
 
 

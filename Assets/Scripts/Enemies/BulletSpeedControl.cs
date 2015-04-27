@@ -21,7 +21,7 @@ public class BulletSpeedControl : MonoBehaviour {
 
 		if(playerScript.timeStopped){
 			restartImpulse=true;
-			rbody.drag=10f;
+			rbody.drag=5f;
 			//transform.Translate(Vector3.forward*speedDuringPause);
 			//rbody.velocity=Vector3.forward*startSpeed*slowFactor;
 			//Debug.Log("stopped");

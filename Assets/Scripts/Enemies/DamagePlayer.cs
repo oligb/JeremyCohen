@@ -16,7 +16,7 @@ public class DamagePlayer : MonoBehaviour {
 	void OnCollisionEnter(Collision col){
 		if(col.gameObject.tag=="Player"){
 			if(!col.gameObject.GetComponent<PlayerMoveQueueing>().timeStopped){		
-			col.gameObject.GetComponent<PlayerHealthManager>().currentHealth-=singleBulletDamage;
+			col.gameObject.GetComponent<PlayerMoveQueueing>().currentEnergy-=singleBulletDamage;
 			Destroy(gameObject);
 			}
 		}

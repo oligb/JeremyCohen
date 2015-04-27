@@ -18,6 +18,9 @@ public class PyramidEnemyControl : MonoBehaviour {
 	public float enemyShotArc=30f;
 	public float enemyBulletSpeed=500f;
 	public GameObject enemyBullet;
+	public float turnDistance=5f;
+	public float moveSpeed=1f;
+	public float moveSpeedDuringPause=.01f;
 
 	public float rotateSpeed=1f;
 	public float timeStopRotateSpeed=.5f;
@@ -38,17 +41,17 @@ public class PyramidEnemyControl : MonoBehaviour {
 		RaycastHit forwardHit;
 		RaycastHit hit;
 
-		if (Physics.Raycast(playerRay, out hit,100f)){
+		if (Physics.Raycast(playerRay, out hit,visionDistance)){
 			if(hit.collider.gameObject==player.gameObject){
 				canSeePlayer=true;
 
 				Vector3 fwd = transform.TransformDirection(Vector3.forward);
 			if (Physics.Raycast (transform.position,fwd , out forwardHit)) {
 				if(forwardHit.collider.gameObject==player.gameObject){
-				shooting=true;
-				}
+					shooting=true;
+					}
 					else{
-						//shooting=false;
+					shooting=false;
 					}
 				}
 			}
@@ -57,53 +60,35 @@ public class PyramidEnemyControl : MonoBehaviour {
 				shooting=false;
 			}
 		}
-
-
-
-
-		/*
-		Ray ray = new Ray (transform.position, player.position-transform.position);
-		RaycastHit hit;
-
-		Debug.DrawRay(transform.position, player.position-transform.position);
-
-
-
-		if(lookingAtPlayer){
-			shooting=true;
-			turning=false;
-			transform.LookAt(player.position);
-			if(GameState.timeStopped){
-				lookingAtPlayer=false;
+		
+		Ray ray = new Ray (transform.position, transform.forward);
+		RaycastHit movementHit;
+		if( Physics.Raycast(ray,out movementHit,turnDistance)){
+			if(movementHit.collider.name=="Wall(Clone)"){
+				transform.Rotate (0f,90f,0f);
 			}
 		}
-		else{
+		if(!canSeePlayer){
 
-			if (Physics.Raycast (ray, out hit)) {
-				if (hit.collider.gameObject.tag == "Player") {
-					shooting=true;
-					if(!turning){
-						StartCoroutine("LookAtPlayer");
-						turning=true;
-					}
-				}
-				else{
-					shooting=false;
-					lookingAtPlayer=false;
-					turning=false;
-					StopCoroutine("LookAtPlayer");
-				}
-				
-				
+			if(!player.GetComponent<PlayerMoveQueueing>().timeStopped){
+			transform.Translate (Vector3.forward * moveSpeed);
 			}
+
+			/*
+			if(player.GetComponent<PlayerMoveQueueing>().timeStopped){
+				transform.Translate (Vector3.forward * moveSpeedDuringPause);
+			}
+			else{
+			transform.Translate (Vector3.forward * moveSpeed);
+			}
+			*/
 		}
-		*/
 	}
 
 	IEnumerator TurnCoroutine(){
 
 		while(true){
-			if(canSeePlayer){
+			if(canSeePlayer && !player.GetComponent<PlayerMoveQueueing>().timeStopped){
 		Vector3 targetDir = player.position - transform.position;
 				float step;
 				if(player.GetComponent<PlayerMoveQueueing>().timeStopped){
@@ -120,28 +105,6 @@ public class PyramidEnemyControl : MonoBehaviour {
 			yield return 0;
 		}
 	}
-
-	/*
-	IEnumerator LookAtPlayer(){
-
-		Quaternion startRot=transform.rotation;
-		Quaternion startTarget=Quaternion.LookRotation((player.position-transform.position),Vector3.up);
-		float i=0f;
-		while (i<1f){
-			startTarget=Quaternion.LookRotation((player.position-transform.position),Vector3.up);
-			transform.rotation=Quaternion.Slerp (startRot,startTarget,i);
-
-			if(!GameState.timeStopped){
-				i+=turnSpeed;
-			}
-			yield return 0;
-		}
-		Debug.Log("shootnow?");
-		lookingAtPlayer=true;
-		yield break;
-
-	}
-*/
 
 	IEnumerator ShootingAtPlayer(){
 
@@ -164,24 +127,7 @@ public class PyramidEnemyControl : MonoBehaviour {
 			yield return 0;
 			}
 		}
-
-		/*
-		Debug.Log("called");
-		while(shooting){
-			/*
-			if(delayBeforeFirstShot){
-				delayBeforeFirstShot=false;
-				yield return new WaitForSeconds(firstShotDelay);
-			}
-
-			Shoot ();
-			yield return 0;
-		//shoot at last known pos
-			//yield return new WaitForSeconds(delayBetweenLaterShots);
-
-		}
-		yield return 0;
-		*/
+	
 
 		void Shoot(){
 		//Debug.Log("called");
@@ -197,6 +143,12 @@ public class PyramidEnemyControl : MonoBehaviour {
 			bullet.GetComponent<BulletSpeedControl>().startSpeed=bulletForce.z;
 		}
 	}
+
+
+
+	void FixedUpdate(){
+
+}
 
 }
 	

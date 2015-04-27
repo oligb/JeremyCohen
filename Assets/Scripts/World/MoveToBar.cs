@@ -11,7 +11,8 @@ public class MoveToBar : MonoBehaviour {
 	public float energyRestored=5f;
 
 	void Start () {
-		//player=GameObject.FindWithTag("Player");
+		player=GameObject.FindWithTag("Player");
+		secretTarget=GameObject.FindWithTag("SecretBarPoint").transform;
 	}
 	
 	// Update is called once per frame
