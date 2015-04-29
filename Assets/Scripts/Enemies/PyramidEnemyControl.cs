@@ -64,8 +64,16 @@ public class PyramidEnemyControl : MonoBehaviour {
 		Ray ray = new Ray (transform.position, transform.forward);
 		RaycastHit movementHit;
 		if( Physics.Raycast(ray,out movementHit,turnDistance)){
-			if(movementHit.collider.name=="Wall(Clone)"){
+			if(movementHit.collider.tag=="Walls"){
+				float rando=Random.Range(0f,1f);
+				if(rando<.5f){
 				transform.Rotate (0f,90f,0f);
+				}
+				else{
+				transform.Rotate (0f,-90f,0f);
+
+				}
+
 			}
 		}
 		if(!canSeePlayer){

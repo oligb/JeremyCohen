@@ -33,9 +33,10 @@ public class MoveToBar : MonoBehaviour {
 	IEnumerator SwoopToBar(){
 		Vector3 startPos = transform.position;
 		Vector3 startScale= transform.localScale;
+		//Vector3 targetPos= secretTarget.position;
 		float i =0f;
 		while (i<=2f){
-			Debug.Log(i);
+			//Debug.Log(i);
 			transform.position=Vector3.Lerp(startPos,secretTarget.position,i);
 			transform.localScale=Vector3.Lerp(startScale,Vector3.one*endScale,i/2);
 				i+=speed;
@@ -43,5 +44,6 @@ public class MoveToBar : MonoBehaviour {
 		}
 		player.GetComponent<PlayerMoveQueueing>().currentEnergy+=energyRestored;
 		Destroy(gameObject);
+		yield break;
 	}
 }

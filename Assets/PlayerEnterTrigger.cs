@@ -59,7 +59,7 @@ public class PlayerEnterTrigger : MonoBehaviour {
 		stuffHolder.SetActive(false);
 		float i=0f;
 		while(i<=1f){
-			targetPosCam=player.position-player.transform.forward*5;
+			targetPosCam=player.position-player.transform.forward*5+player.transform.up*3;
 			Vector3 currentPos=Vector3.Lerp(startPosCam,targetPosCam,i);
 			//Vector3 currentRot=Vector3.Lerp(startRotation,targetRotation,i);
 			Quaternion currentRot=Quaternion.Slerp(startRotation,targetRotation,i);

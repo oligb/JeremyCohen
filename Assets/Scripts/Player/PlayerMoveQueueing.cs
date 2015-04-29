@@ -12,6 +12,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public GameObject trailHolder;
 	public GameObject overlay;
 	public GameObject ghostHolder;
+	public GameObject barStuffHolder;
 
 	public float shotArcToPredictorModifier=5f;
 	public float stepSize=5f;
@@ -36,6 +37,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public float energyAtQueStart;
 
 	void Start () {
+		barStuffHolder=GameObject.Find("StuffHolder");
 		overlay=GameObject.Find("Overlay");
 		playerControl=GetComponent<PlayerController>();
 		playerAttack=GetComponent<PlayerAttacks>();
@@ -55,6 +57,12 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 
 		if(queueing){
+			if(currentEnergy-energyDepletionRate<=0 &&currentEnergy<=0f){
+				playerControl.canMove=false;
+			}
+			else{
+				playerControl.canMove=true;
+			}
 			overlay.gameObject.SetActive(true);
 		}
 		else{
@@ -115,7 +123,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 		if(Physics.Raycast(cursorRay, out cursorRayHit, 1000f)){
 			
-				if(queueing  && currentEnergy>=0f){
+				if(queueing  && currentEnergy-shotEnergyDepletionRate>=0f){
 				queuedStepList.Add(transform.position);
 				queuedStepList.Add(shootSignalVector);
 				currentEnergy-=shotEnergyDepletionRate;
@@ -136,12 +144,17 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 				}
 				else{
+					barStuffHolder.GetComponent<ShakeBar>().TriggerShake();
+				}
+				/*
+				else{
 					if(currentEnergy>=0f){
 					Vector3 targetPos=cursorRayHit.point;
 					targetPos.y=transform.position.y;
 					playerAttack.Shoot(transform.position,targetPos);
 					}
 				}
+				*/
 			}
 
 
@@ -157,7 +170,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		GetComponent<Rigidbody>().velocity=Vector3.zero;
 		playingBack=true;
 		StopCoroutine("Queueing");
-		GetComponent<PlayerController>().canMove=false;
+		playerControl.canMove=false;
 		int i=0;
 		int numSteps=queuedStepList.Count;
 
@@ -182,7 +195,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		shotTargets.Clear();
 		placeholderLines.Clear();
 		currentShotIterator=0;
-		GetComponent<PlayerController>().canMove=true;
+		playerControl.canMove=true;
 		playingBack=false;
 		yield break;
 
