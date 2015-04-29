@@ -15,7 +15,6 @@ public class PlayerAttacks : MonoBehaviour {
 	public float shotArc=30f;
 	public float shotVamp=5f;
 	public float maxRange=10f;
-	public Camera mainCam;
 	void Start () {
 	
 	}

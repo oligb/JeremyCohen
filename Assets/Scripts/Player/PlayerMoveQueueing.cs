@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public class PlayerMoveQueueing: MonoBehaviour {
 
 	// Use this for initialization
-	public List<Vector3> queuedStepList = new List<Vector3>();
-	public List<Vector3> shotTargets = new List<Vector3>();
-	public List<GameObject> placeholderLines = new List<GameObject>();
+	List<Vector3> queuedStepList = new List<Vector3>();
+	List<Vector3> shotTargets = new List<Vector3>();
+	List<GameObject> placeholderLines = new List<GameObject>();
 
 	public GameObject lineObject;
 	public GameObject trailHolder;
@@ -18,13 +18,15 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public float stepSize=5f;
 	public float stepDelay=1f;
 	public float delayWhileShooting=2f;
-	public Vector3 shootSignalVector=new Vector3(100f,100f,100f);
-	public PlayerController playerControl;
-	public PlayerAttacks playerAttack; 
-	public int currentShotIterator=0;
+
+	Vector3 shootSignalVector=new Vector3(100f,100f,100f);
+	PlayerController playerControl;
+	PlayerAttacks playerAttack; 
+	int currentShotIterator=0;
+
+
 	public bool queueing=false;
 	public bool playingBack=false;
-
 	public bool timeStopped=false;
 
 	public float maxEnergy=100f;
@@ -33,8 +35,8 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public float shotEnergyDepletionRate=10f;
 	public float energyRechargeRate=.3f;
 
-	public Vector3 posAtQueStart;
-	public float energyAtQueStart;
+	Vector3 posAtQueStart;
+	float energyAtQueStart;
 
 	void Start () {
 		barStuffHolder=GameObject.Find("StuffHolder");

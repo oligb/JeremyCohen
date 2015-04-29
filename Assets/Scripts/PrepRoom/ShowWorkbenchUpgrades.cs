@@ -15,7 +15,7 @@ public class ShowWorkbenchUpgrades : MonoBehaviour {
 	// Update is called once per frame
 
 	void CalculateDimensions(){
-		int numUpgrades = manager.availableUpgrades.Count;
+		//int numUpgrades = manager.availableUpgrades.Count;
 	}
 
 

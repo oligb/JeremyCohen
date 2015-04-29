@@ -9,15 +9,12 @@ public class PlayerUpgradeManager : MonoBehaviour {
 
 	public List<GameObject> currentUpgrades = new List<GameObject>();
 
-	public GameObject testUpgrade;
-
-	public int playerLevel=1;
-	public int pointsPerLevel=5;
-
 	public float startShotDamage,startShotArc,startShotRange,startShotSpeed,startMoveSpeed,startBarSize,startShotVamp;
 	public int startNumShots;
-	private float currentShotDamage,currentShotArc,currentShotRange,currentShotSpeed,currentMoveSpeed,currentBarSize,currentShotVamp;
-	private int currentNumShots;
+
+	float currentShotDamage,currentShotArc,currentShotRange,currentShotSpeed,currentMoveSpeed,currentBarSize,currentShotVamp;
+	int currentNumShots;
+
 	void Start () {
 
 		currentMoveSpeed=startMoveSpeed;
@@ -35,17 +32,6 @@ public class PlayerUpgradeManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	/*
-		if(Input.anyKeyDown){
-			UpdateTheStats();
-			SetTheStats();
-		}
-*/
-		
-		if(Input.GetKeyDown(KeyCode.U)){
-		//	Instantiate(testUpgrade
-		}
-
 	}
 
 

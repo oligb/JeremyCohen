@@ -6,6 +6,7 @@ public class PlayerStateControls : MonoBehaviour {
 	// Use this for initialization
 	public Vector3 playerStartPos=Vector3.zero;
 	public GameObject mapMaker;
+
 	void Start () {
 	
 	}

@@ -5,11 +5,12 @@ using System.Collections.Generic;
 public class PlayerController : MonoBehaviour {
 
 	public float moveSpeed=2f;
-	public Rigidbody rbody;
 	public bool canMove=true;
-	public Vector3 velocity;
-	public float startDrag;
 	public float maxSpeed=15f;
+	Rigidbody rbody;
+	Vector3 velocity;
+	float startDrag;
+
 	void Start () {
 
 		rbody= GetComponent<Rigidbody>();
