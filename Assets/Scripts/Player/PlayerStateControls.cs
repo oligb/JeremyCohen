@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerStateControls : MonoBehaviour {
 
@@ -30,6 +31,8 @@ public class PlayerStateControls : MonoBehaviour {
 		transform.position=playerLevelStartPos;
 	}
 	public void MoveToPrepRoom(){
+		mapMaker.GetComponent<MapMakerV7>().ClearList();
+
 		transform.position=playerInitSpawnPoint;
 	}
 }

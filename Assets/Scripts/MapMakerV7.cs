@@ -6,7 +6,8 @@ public class MapMakerV7 : MonoBehaviour {
 	
 	// A list for the gameObjects to reside so that the convex hull can be checked.
 	public List<GameObject> convexHullList = new List<GameObject>();
-	
+
+
 	// The game object variables.
 	public GameObject floortile, walltile, outerWall, spawner;
 	public GameObject LWall, TripletWall, SquareWall;
@@ -52,7 +53,15 @@ public class MapMakerV7 : MonoBehaviour {
 	bool initPath = true;
 	
 	
-	
+	public void ClearList(){
+
+
+		foreach(GameObject tile in convexHullList){
+			Destroy(tile);
+		} 
+		convexHullList.Clear();
+
+	}
 	// Use this for initialization
 	void Start () {
 		
@@ -326,7 +335,10 @@ public class MapMakerV7 : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.R)){
 			Application.LoadLevel(Application.loadedLevel);
 		}
-		
+		if (Input.GetKeyDown (KeyCode.Alpha9)) {
+			ClearList ();
+		}
+
 		if ( !hullChecked && currentPathCount >= maximumPathCount){
 			hullCheck();
 			hullChecked = true;
