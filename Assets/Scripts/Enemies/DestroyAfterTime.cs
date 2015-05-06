@@ -33,7 +33,7 @@ public class DestroyAfterTime : MonoBehaviour {
 			Destroy(col.gameObject);
 		}
 		else if(col.gameObject.GetComponent<TakeDamage>() !=null){
-			col.gameObject.GetComponent<TakeDamage>().KillEnemy();
+			col.gameObject.GetComponent<TakeDamage>().enemyHealth-=shotDamage;
 
 		}
 		else if(col.gameObject.GetComponent<PunchingBagDamage>() != null){

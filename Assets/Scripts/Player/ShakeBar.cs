@@ -19,7 +19,7 @@ public class ShakeBar : MonoBehaviour {
 	
 	public void TriggerShake(){
 		
-		StartCoroutine(Shake ());
+		StartCoroutine(Shake());
 		
 	}
 	IEnumerator Shake() {

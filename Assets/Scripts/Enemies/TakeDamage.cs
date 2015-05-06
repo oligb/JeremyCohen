@@ -6,6 +6,7 @@ public class TakeDamage : MonoBehaviour {
 	// Use this for initialization
 
 	public GameObject hitParticle;
+	public float enemyHealth=100f;
 	bool hitOnce=true;
 	void Start () {
 	
@@ -13,7 +14,10 @@ public class TakeDamage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		
+		if(enemyHealth<=0f){
+			KillEnemy();
+		}
 	}
 
 

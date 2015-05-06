@@ -27,7 +27,10 @@ public class MapMakerV7 : MonoBehaviour {
 	public float enemySpawnChance = .08f;
 	public int maxEnemiesSpawned = 100;
 	public GameObject exit;
-	public GameObject punchingBag;
+	public GameObject pyramidEnemy;
+	public GameObject explosiveEnemy;
+	public GameObject chasingEnemy;
+	public GameObject armoredEnemy;
 	// float to check what to instanciate
 	float randomNumber;
 	
@@ -261,7 +264,8 @@ public class MapMakerV7 : MonoBehaviour {
 					
 					if(randomNumber < enemySpawnChance){
 						if ( enemyCount < maxEnemiesSpawned ) {
-							GameObject enemyTest = Instantiate(punchingBag,position,Quaternion.identity) as GameObject;
+							GameObject enemyTest = Instantiate(pyramidEnemy,position,Quaternion.identity) as GameObject;
+
 							enemyTest.transform.Translate(Vector3.up*2);
 							enemyCount += 1;
 						}
