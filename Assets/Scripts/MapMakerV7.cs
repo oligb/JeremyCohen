@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class pathinstance : MonoBehaviour {
+public class MapMakerV7 : MonoBehaviour {
 	
 	// A list for the gameObjects to reside so that the convex hull can be checked.
 	public List<GameObject> convexHullList = new List<GameObject>();
@@ -16,13 +16,16 @@ public class pathinstance : MonoBehaviour {
 	bool hullChecked = false;
 	
 	// The tuning knobs.
-	public int maxPathLength = 15;
+	public int maxPathLength = 2;
 	public int maximumPathCount = 3;
-	public float pathmakerChance = 0.01f;
+	public float pathmakerChance = 0.2f;
 	public float wallMakerChance = 0.1f;
-	public int maxXTiles,minXTiles,maxYTiles,minYTiles;
-	public float enemySpawnChance = .05f;
-	public int maxEnemiesSpawned = 25;
+	public int maxXTiles = 10;
+	public int minXTiles = 5;
+	public int maxYTiles = 10;
+	public int minYTiles = 5;
+	public float enemySpawnChance = .08f;
+	public int maxEnemiesSpawned = 100;
 	public GameObject exit;
 	public GameObject punchingBag;
 	// float to check what to instanciate
@@ -31,7 +34,7 @@ public class pathinstance : MonoBehaviour {
 	public int roomNumber = 0;
 	
 	int previousDirection;
-
+	
 	// to controll the size of the maze.
 	int currentPathLength,	 currentPathCount = 0;
 	
@@ -54,14 +57,14 @@ public class pathinstance : MonoBehaviour {
 		wallTilesList.Add(TripletWall);
 		wallTilesList.Add(LWall);
 		wallTilesList.Add(SquareWall);
-
+		
 		bool startedPath = false;
 		bool onNorth = false; 
 		bool onSouth = false;
 		bool onEast = false;
 		bool onWest = false;
 		bool onBorder = false;
-
+		
 		//This chunk is very similar to the grid maker, it creates the starting grid.
 		GameObject currentObject;
 		
@@ -72,18 +75,18 @@ public class pathinstance : MonoBehaviour {
 		// We are using the grid/ path instanciator.
 		for (int x = 0; x < horizontalTileCount; x++){
 			for ( int z = 0; z < verticalTileCount; z++){
-
-
+				
+				
 				if (x == 0){onWest = true;}
 				if (x == horizontalTileCount){onEast = true;}
 				if (z == 0){onSouth = true;}
 				if (z == verticalTileCount){onNorth = true;}
-
+				
 				if(onNorth || onSouth || onWest || onEast){
 					onBorder = true;
 				}
-
-
+				
+				
 				bool notInCorner;
 				
 				if ( x > 4 && x < verticalTileCount - 3 &&
@@ -183,22 +186,22 @@ public class pathinstance : MonoBehaviour {
 		int pathDirection = 5;
 		int randomDirectionNumber;
 		List<int> pathDirectionList = new List<int>();;
-
+		
 		int verticalTileCount =  Random.Range(minYTiles,maxYTiles);
 		int horizontalTileCount = Random.Range(minXTiles,maxXTiles);
 		Vector3 position = Vector3.zero;
 		
 		Vector3 spawnerPosition = spawnGridPos;
-
+		
 		for (int x = 0; x < verticalTileCount; x++){
 			for ( int z = 0; z < horizontalTileCount; z++){
 				GameObject currentObject;
-
+				
 				if (x == 0){onWest = true;}
 				if (x == horizontalTileCount){onEast = true;}
 				if (z == 0){onSouth = true;}
 				if (z == verticalTileCount){onNorth = true;}
-
+				
 				if(onNorth || onSouth || onWest || onEast){
 					onBorder = true;
 				}
@@ -252,7 +255,7 @@ public class pathinstance : MonoBehaviour {
 							pathDirection = pathDirectionList[randomDirectionNumber];
 							break;
 						}
-
+						
 						pathMaker (activePathSpawnPosition, pathDirection);
 					}
 					
@@ -273,7 +276,7 @@ public class pathinstance : MonoBehaviour {
 				}
 				
 				if ( roomNumber == 0 && randomNumber < .2f && !exitSpawned){
-				//	Debug.Log("Exit instanciate should run.");
+					//	Debug.Log("Exit instanciate should run.");
 					Instantiate(exit, position, Quaternion.identity);
 					exitSpawned = true;
 				}

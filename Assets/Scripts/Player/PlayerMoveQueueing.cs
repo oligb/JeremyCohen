@@ -59,7 +59,8 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 
 		if(queueing){
-			if(currentEnergy-energyDepletionRate<=0 &&currentEnergy<=0f){
+			if(currentEnergy-energyDepletionRate<=1f &&currentEnergy<=1f){
+				GetComponent<Rigidbody>().drag=50000;
 				playerControl.canMove=false;
 			}
 			else{
@@ -78,8 +79,11 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		if(currentEnergy>maxEnergy){
 			currentEnergy=maxEnergy;
 		}
+		else if(currentEnergy<=-3f){
+			GetComponent<PlayerStateControls>().Kill();
+		}
 
-		
+
 		if(Input.GetKeyDown("space") && queueing ){
 			StopCoroutine("Queueing");
 			queueing=false;

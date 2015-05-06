@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 using System.Collections;
 
 public class PlayerEnterTrigger : MonoBehaviour {
@@ -16,13 +16,14 @@ public class PlayerEnterTrigger : MonoBehaviour {
 	public Transform player;
 	public bool onMenu=false;
 	public bool lerping=false;
-
+	public GameObject workbench;
 	public GameObject stuffHolder;
 	
 	void Start(){
+		workbench=GameObject.Find("Workbench");
 		stuffHolder=GameObject.Find("StuffHolder");
 		startRotation=Camera.main.transform.rotation;
-		startPosCam=Camera.main.transform.position;
+		startPosCam=Camera.main.transform.localPosition;
 		player=GameObject.Find("Player").transform;
 	}
 	void Update() {
@@ -31,17 +32,14 @@ public class PlayerEnterTrigger : MonoBehaviour {
 	
 	
 	void OnTriggerEnter(Collider col){
-		if(!onMenu && !lerping){
-			if(col.gameObject==player){
-				targetPosCam=player.position-player.transform.forward*5f;
-			}
-
+		if(!onMenu && !lerping &&col.tag=="Player"){
 			lerping=true;
 			StartCoroutine("ZoomIn");
+
 		}
 	}	
 	void OnTriggerExit(Collider col){
-		if(onMenu && !lerping){
+		if(onMenu && !lerping &&col.tag=="Player"){
 			if(col.gameObject==player){
 				targetPosCam=player.position;
 			}
@@ -53,20 +51,20 @@ public class PlayerEnterTrigger : MonoBehaviour {
 	
 	IEnumerator ZoomIn(){
 
+		workbench.GetComponent<ShowWorkbenchUpgrades>().ShowUpgrades();
 		player.gameObject.GetComponent<PlayerController>().canMove=false;
 		player.gameObject.GetComponent<PlayerController>().GetComponent<Rigidbody>().velocity*=.5f;
 
 		stuffHolder.SetActive(false);
 		float i=0f;
 		while(i<=1f){
-			targetPosCam=player.position-player.transform.forward*5+player.transform.up*3;
 			Vector3 currentPos=Vector3.Lerp(startPosCam,targetPosCam,i);
 			//Vector3 currentRot=Vector3.Lerp(startRotation,targetRotation,i);
 			Quaternion currentRot=Quaternion.Slerp(startRotation,targetRotation,i);
 			float currentFOV=Mathf.Lerp(startFOV,endFOV,i);
 			
 			Camera.main.gameObject.GetComponent<Camera>().fieldOfView=currentFOV;
-			Camera.main.transform.position=currentPos;
+			Camera.main.transform.localPosition=currentPos;
 			Camera.main.transform.localRotation=currentRot;
 			i+=inLerpSpeed;
 			yield return 0;
@@ -79,7 +77,9 @@ public class PlayerEnterTrigger : MonoBehaviour {
 	}
 	
 	IEnumerator ZoomOut(){
+
 		stuffHolder.SetActive(true);
+
 		float i=0f;
 		while(i<=1f){
 			Vector3 currentPos=Vector3.Lerp(targetPosCam,startPosCam,i);
@@ -88,16 +88,17 @@ public class PlayerEnterTrigger : MonoBehaviour {
 			float currentFOV=Mathf.Lerp(endFOV,startFOV,i);
 			
 			Camera.main.gameObject.GetComponent<Camera>().fieldOfView=currentFOV;
-			Camera.main.transform.position=currentPos;
+			Camera.main.transform.localPosition=currentPos;
 			Camera.main.transform.localRotation=currentRot;
 			i+=outLerpSpeed;
 			yield return 0;
 		}
 		Camera.main.gameObject.GetComponent<Camera>().fieldOfView=startFOV;
-		Camera.main.transform.position=startPosCam;
+		Camera.main.transform.localPosition=startPosCam;
 		Camera.main.transform.localRotation=startRotation;
 		lerping=false;
 		onMenu=false;
+		workbench.GetComponent<ShowWorkbenchUpgrades>().DestroyUpgrades();
 		player.gameObject.GetComponent<PlayerUpgradeManager>().SetTheStats();
 		yield break;
 	}

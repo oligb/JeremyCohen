@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+public enum UpgradeType { ShotDamage,MoveSpeed,ShotArc,ShotRange,ShotSpeed,NumShots }
 
 public class UpgradeStats : MonoBehaviour {
 
 	// Use this for initialization
 	public int upgradeCost=5;
+
+	public UpgradeType types;
+	public Texture ShotDamage,MoveSpeed,ShotArc,ShotRange,ShotSpeed,NumShots;
 
 	public float shotDamageBonus=0f;
 	public float moveSpeedBonus=0f;
@@ -15,8 +21,32 @@ public class UpgradeStats : MonoBehaviour {
 	public float barSizeBonus=0f;
 	public int numShotsBonus=0;
 
+	public Texture upgradeTexture;
+
 	void Start () {
-	
+
+		switch(types){
+			case UpgradeType.ShotDamage:
+			upgradeTexture=ShotDamage;
+			break;
+			case UpgradeType.MoveSpeed:
+			upgradeTexture=MoveSpeed;
+			break;
+			case UpgradeType.ShotArc:
+			upgradeTexture=ShotArc;
+			break;
+			case UpgradeType.ShotRange:
+			upgradeTexture=ShotRange;
+			break;
+			case UpgradeType.ShotSpeed:
+			upgradeTexture=ShotSpeed;
+			break;
+			case UpgradeType.NumShots:
+			upgradeTexture=NumShots;
+			break;
+			           }
+
+		GetComponent<MeshRenderer>().materials[0].SetTexture(0,upgradeTexture);
 	}
 	
 	// Update is called once per frame

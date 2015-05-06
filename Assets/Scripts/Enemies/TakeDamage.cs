@@ -1,11 +1,12 @@
-﻿	using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class TakeDamage : MonoBehaviour {
 
 	// Use this for initialization
-	public GameObject barRefillParticle;
-	public int energyRestored=5;
+
+	public GameObject hitParticle;
+	bool hitOnce=true;
 	void Start () {
 	
 	}
@@ -17,12 +18,12 @@ public class TakeDamage : MonoBehaviour {
 
 
 	public void KillEnemy(){
-		for(int i=1;i<energyRestored+1; i++){
-		GameObject cube= Instantiate (barRefillParticle,transform.position,Quaternion.identity) as GameObject;
-			cube.transform.Rotate(0f,i*360/energyRestored,0f);
-			cube.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward*300f);
 
-		}
+		if(hitOnce){
+			hitOnce=false;
+		GetComponent<EnemyDrops>().DropStuff();
+		Instantiate(hitParticle,transform.position,Quaternion.Euler(90f,0f,0f));
 		Destroy(gameObject);
+		}
 	}
 }

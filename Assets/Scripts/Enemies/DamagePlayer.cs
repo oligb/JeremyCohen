@@ -5,6 +5,7 @@ public class DamagePlayer : MonoBehaviour {
 
 	// Use this for initialization
 	public float singleBulletDamage=1f;
+	public GameObject hitParticle;
 	void Start () {
 	
 	}
@@ -15,12 +16,14 @@ public class DamagePlayer : MonoBehaviour {
 	}
 	void OnCollisionEnter(Collision col){
 		if(col.gameObject.tag=="Player"){
-			if(!col.gameObject.GetComponent<PlayerMoveQueueing>().timeStopped){		
+
+			if(!col.gameObject.GetComponent<PlayerMoveQueueing>().timeStopped){	
+				Instantiate(hitParticle,transform.position,Quaternion.Euler(90f,0f,0f));
 			col.gameObject.GetComponent<PlayerMoveQueueing>().currentEnergy-=singleBulletDamage;
 			Destroy(gameObject);
 			}
 		}
-		else{
+		else if(col.gameObject.tag=="Walls"){
 			Destroy(gameObject);
 		}
 	}
