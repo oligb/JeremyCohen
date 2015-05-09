@@ -6,15 +6,16 @@ public class MapMakerV7 : MonoBehaviour {
 	
 	// A list for the gameObjects to reside so that the convex hull can be checked.
 	public List<GameObject> convexHullList = new List<GameObject>();
-
-
+	List<GameObject> tempConvexHullList = new List<GameObject>();
+		
 	// The game object variables.
 	public GameObject floortile, walltile, outerWall, spawner;
 	public GameObject LWall, TripletWall, SquareWall;
 	
 	List<GameObject> wallTilesList = new List<GameObject>();
-	
+
 	bool hullChecked = false;
+	bool exitCorrectPosition = false;
 	
 	// The tuning knobs.
 	public int maxPathLength = 2;
@@ -28,13 +29,14 @@ public class MapMakerV7 : MonoBehaviour {
 	public float enemySpawnChance = .08f;
 	public int maxEnemiesSpawned = 100;
 	public GameObject exit;
+	GameObject exitInstance;
 	public GameObject pyramidEnemy;
 	public GameObject explosiveEnemy;
 	public GameObject chasingEnemy;
 	public GameObject armoredEnemy;
 	// float to check what to instanciate
 	float randomNumber;
-	
+	int loopbreaker = 0;
 	public int roomNumber = 0;
 	
 	int previousDirection;
@@ -290,7 +292,7 @@ public class MapMakerV7 : MonoBehaviour {
 				
 				if ( roomNumber == 0 && randomNumber < .2f && !exitSpawned){
 					//	Debug.Log("Exit instanciate should run.");
-					Instantiate(exit, position, Quaternion.identity);
+					exitInstance = Instantiate(exit, position, Quaternion.identity) as GameObject;
 					exitSpawned = true;
 				}
 			}
@@ -306,32 +308,55 @@ public class MapMakerV7 : MonoBehaviour {
 		
 		foreach  ( GameObject element in convexHullList){
 			Collider[] hitColliders;
-			
+			GameObject currentObj;
 			hitColliders = Physics.OverlapSphere(element.transform.position + new Vector3(0f,0f,tileSize), 2f);
 			if (hitColliders.Length == 0){
-				Instantiate(outerWall, element.transform.position + new Vector3(0f,0f,tileSize), transform.rotation);
+				currentObj = Instantiate(outerWall, element.transform.position + new Vector3(0f,0f,tileSize), transform.rotation) as GameObject;
+				tempConvexHullList.Add(currentObj);
 			}
 			
 			hitColliders = Physics.OverlapSphere(element.transform.position + new Vector3(0f,0f,-tileSize), 2f);
 			if (hitColliders.Length == 0){
-				Instantiate(outerWall, element.transform.position + new Vector3(0f,0f,-tileSize), transform.rotation);
+				currentObj = Instantiate(outerWall, element.transform.position + new Vector3(0f,0f,-tileSize), transform.rotation) as GameObject;
+				tempConvexHullList.Add(currentObj);
 			}
 			
-			hitColliders = Physics.OverlapSphere(element.transform.position + new Vector3(tileSize,0f,0f), 2f);
+			hitColliders = Physics.OverlapSphere(element.transform.position + new Vector3(tileSize,0f,0f), 2f) ;
 			if (hitColliders.Length == 0){
-				Instantiate(outerWall, element.transform.position + new Vector3(tileSize,0f,0f), transform.rotation);
+				currentObj = Instantiate(outerWall, element.transform.position + new Vector3(tileSize,0f,0f), transform.rotation) as GameObject;
+				tempConvexHullList.Add(currentObj);
 			}
 			
 			hitColliders = Physics.OverlapSphere(element.transform.position + new Vector3(-tileSize,0f,0f), 2f);
 			if (hitColliders.Length == 0){
-				Instantiate(outerWall, element.transform.position + new Vector3(-tileSize,0f,0f), transform.rotation);
+				currentObj = Instantiate(outerWall, element.transform.position + new Vector3(-tileSize,0f,0f), transform.rotation) as GameObject;
+				tempConvexHullList.Add(currentObj);
 			}
 		}
+	}
+
+	public void DestroyTheWorld(){
+		Debug.Log("World should be destroyed.");
+		foreach (GameObject worldTile in convexHullList){
+			Destroy(worldTile);
+		}
+		foreach (GameObject worldTile in tempConvexHullList){
+			Destroy(worldTile);
+		}
+		convexHullList.Clear();
+		tempConvexHullList.Clear();
+
+		
+		Debug.Log("World Destroyed!");
 	}
 	
 	
 	// Update is called once per frame
 	void Update () {
+		if(Input.GetKeyDown(KeyCode.H)){
+			DestroyTheWorld();
+		}
+		
 		if(Input.GetKeyDown(KeyCode.R)){
 			Application.LoadLevel(Application.loadedLevel);
 		}
@@ -343,6 +368,27 @@ public class MapMakerV7 : MonoBehaviour {
 			hullCheck();
 			hullChecked = true;
 		}
+
+		if(loopbreaker < 100 && Vector3.Distance(new Vector3(0,0,0), exitInstance.transform.position) < 30){
+			Debug.Log("Exit was too close");
+			Destroy(exitInstance);
+			GameObject newLocation;
+			newLocation = convexHullList[Random.Range(0,convexHullList.Count)];
+			int count = 0;
+			while( newLocation.name.StartsWith("Floor") && count < 100){
+				newLocation = convexHullList[Random.Range(0,convexHullList.Count)];
+				Debug.Log("In the loop");
+				count++;
+			}
+			exitInstance = Instantiate(exit, newLocation.transform.position, Quaternion.identity) as GameObject;
+			loopbreaker++;
+		} 
+
+		if(Vector3.Distance(new Vector3(0,0,0), exitInstance.transform.position) > 30 && !exitCorrectPosition){
+			exitCorrectPosition = true;
+			
+		} 
+
 	}	
 	
 }
