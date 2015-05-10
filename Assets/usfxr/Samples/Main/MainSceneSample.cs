@@ -82,7 +82,7 @@ public class MainSceneSample : MonoBehaviour {
 		if (Input.GetKeyDown("f")) {
 			Debug.Log("Key: F (Random coin/pickup sound, automatically generated)");
 			SfxrSynth synthF = new SfxrSynth();
-			synthF.parameters.GeneratePickupCoin();
+			synthF.parameters.GenerateExplosion();
 			synthF.Play();
 		}
 	}

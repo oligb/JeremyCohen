@@ -15,8 +15,10 @@ public class PlayerAttacks : MonoBehaviour {
 	public float shotArc=30f;
 	public float shotVamp=5f;
 	public float maxRange=10f;
+
+	SfxrSynth shotSynth;
 	void Start () {
-	
+		PlayShotSound();
 	}
 	
 	// Update is called once per frame
@@ -29,6 +31,7 @@ public class PlayerAttacks : MonoBehaviour {
 
 
 	public void Shoot(Vector3 playerPos, Vector3 targetPos){
+		PlayShotSound();
 
 		//shake amt relative to player
 		Camera.main.gameObject.GetComponent<CamShake>().TriggerShake();
@@ -45,5 +48,22 @@ public class PlayerAttacks : MonoBehaviour {
 			
 		}
 	}
+
+
+	public void PlayShotSound(){
+		if (shotSynth == null) {
+			shotSynth = new SfxrSynth();
+			shotSynth.parameters.SetSettingsString("3,.223,,,,.1814,.456,.215,,-.286,-.132,.767,.523,.812,.975,.0487,,,.0397,,,.0469,,-.0094,,.751,-.321,.0016,.256,.03,,");
+			shotSynth.SetParentTransform(Camera.main.transform);
+
+		float ti = Time.realtimeSinceStartup;
+			shotSynth.CacheMutations(15, 0.03f);
+	}
+
+		shotSynth.PlayMutated();
+
+	}
+
+
 
 }

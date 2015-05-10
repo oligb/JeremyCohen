@@ -8,6 +8,8 @@ public class ClickableUpgrades : MonoBehaviour {
 	public GameObject player;
 	public GameObject workbenchTrigger;
 	public PlayerUpgradeManager playerUpgrades;
+	public float duration=.5f;
+	public float magnitude=.1f;
 
 	public MeshRenderer upgradeHighlightChild;
 	public bool onMenu=false;
@@ -17,6 +19,9 @@ public class ClickableUpgrades : MonoBehaviour {
 	Vector3 initScale;
 	public GameObject actualUpgradeObject;
 	public Texture upgradeTexture;
+
+	public int usedPoints;
+	public int availablePoints;
 
 	void Start () {
 		initScale=transform.localScale;
@@ -28,6 +33,12 @@ public class ClickableUpgrades : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {	
+
+
+
+		usedPoints=playerUpgrades.usedUpgradePoints;
+		availablePoints=playerUpgrades.currentUpgradePoints;
+
 		if(workbenchTrigger.GetComponent<PlayerEnterTrigger>().onMenu){
 			onMenu=true;
 		}
@@ -48,28 +59,62 @@ public class ClickableUpgrades : MonoBehaviour {
 	}
 
 	public void Enable(){
+
 		upgradeHighlightChild.enabled=true;
 		playerUpgrades.currentUpgrades.Add(actualUpgradeObject);
-
+		playerUpgrades.usedUpgradePoints+= actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost;
 		playerUpgrades.UpdateTheStats();
 	}
 	public void Disable(){
 		upgradeHighlightChild.enabled=false;
 		playerUpgrades.currentUpgrades.Remove(actualUpgradeObject);
+		playerUpgrades.usedUpgradePoints-= actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost;
 		playerUpgrades.UpdateTheStats();
 	}
 
+
+		IEnumerator ShakeUpgrade() {
+			
+			float elapsed = 0.0f;
+			
+			Vector3 originalCamPos = transform.localPosition;
+			
+			while (elapsed < duration) {
+				
+				elapsed += Time.deltaTime;          
+				
+				float percentComplete = elapsed / duration;         
+				float damper = 1.0f - Mathf.Clamp(4.0f * percentComplete - 3.0f, 0.0f, 1.0f);
+				
+				// map value to [-1, 1]
+				float x = Random.value * 2.0f - 1.0f;
+				float y = Random.value * 2.0f - 1.0f;
+				x *= magnitude * damper;
+				y *= magnitude * damper;
+				
+				transform.localPosition = new Vector3(originalCamPos.x+x, originalCamPos.y, originalCamPos.z);
+				
+				yield return null;
+			}
+			
+			transform.localPosition = originalCamPos;
+		}
 	
 	void OnMouseOver(){	
 		mouseOver=true;
 		if(onMenu){
-			if( Input.GetMouseButtonDown(0)){
+			if( Input.GetMouseButtonDown(0) ){
 			
 				if(!upgradeEnabled){
+					if(actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost+usedPoints<=availablePoints){
 					upgradeEnabled=true;
 					Enable ();
-				}
+					}
+					else{
+						StartCoroutine("ShakeUpgrade");
+					}
 
+				}
 			else{
 				upgradeEnabled=false;
 				Disable();
@@ -78,6 +123,9 @@ public class ClickableUpgrades : MonoBehaviour {
 			}
 		}
 	}
+
+
+
 	void OnMouseExit(){
 		mouseOver=false;
 	}

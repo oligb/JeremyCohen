@@ -16,6 +16,9 @@ public class ShowWorkbenchUpgrades : MonoBehaviour {
 		manager=GameObject.Find("Player").GetComponent<PlayerUpgradeManager>();
 	}
 
+	void Update(){
+	}
+
 
 	public void ShowUpgrades(){
 
@@ -32,9 +35,11 @@ public class ShowWorkbenchUpgrades : MonoBehaviour {
 					for(float j=.4f; j>=-.3f; j-=margins){
 				if(current<numUpgrades){
 					GameObject upgradeTile=Instantiate(upgradePlaceholder,Vector3.zero,Quaternion.Euler(0f,90f,0f)) as GameObject;
+
 					upgradeTile.transform.SetParent(gameObject.transform);
 					upgradeTile.transform.localPosition=new Vector3(j,i,.5f);
 					upgradeTile.transform.localScale=new Vector3(.03f,upgradeScale,upgradeScale);
+
 
 					upgradeTile.GetComponent<ClickableUpgrades>().actualUpgradeObject=availableUpgrades[current];
 					upgradeTile.GetComponent<ClickableUpgrades>().SetTextureFromUpgrade();
@@ -58,7 +63,5 @@ public class ShowWorkbenchUpgrades : MonoBehaviour {
 		}
 	}
 
-	void Update () {
-	
-	}
+
 }

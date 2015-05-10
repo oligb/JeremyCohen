@@ -9,7 +9,7 @@ public class PlayerUpgradeManager : MonoBehaviour {
 
 	public List<GameObject> currentUpgrades = new List<GameObject>();
 
-
+	public int usedUpgradePoints=0;
 	public int currentUpgradePoints=5;
 
 	public float startShotDamage,startShotArc,startShotRange,startShotSpeed,startMoveSpeed,startBarSize;
