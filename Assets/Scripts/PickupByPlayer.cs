@@ -17,7 +17,9 @@ public class PickupByPlayer : MonoBehaviour {
 	void OnCollisionEnter(Collision col){
 		if(col.gameObject.tag=="Player"){
 			player.GetComponent<PlayerUpgradeManager>().availableUpgrades.Add(gameObject);
-			transform.position=new Vector3(0,-5f,0f);
+			transform.position=new Vector3(0,100f,0f);
+			Destroy(GetComponent<Rigidbody>());
 		}
 	}
+
 }

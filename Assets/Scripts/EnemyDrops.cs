@@ -8,11 +8,15 @@ public class EnemyDrops : MonoBehaviour {
 	public int energyRestored=5;
 	public GameObject dropManager;
 	public float randomUpgradeDropRate;
+	public float upgradePointDropRate;
+	public GameObject upgradePoint;
 	public List<GameObject> possibleUpgrades=new List<GameObject>();
 	void Start () {
 		dropManager=GameObject.Find("DropManager");
 		randomUpgradeDropRate=dropManager.GetComponent<DropManager>().randomEnemyDropRate;
+		upgradePointDropRate=dropManager.GetComponent<DropManager>().upgradePointDropRate;
 		possibleUpgrades=dropManager.GetComponent<DropManager>().possibleDropBag;
+		energyRestored=dropManager.GetComponent<DropManager>().numPickupsPerEnemy;
 
 	
 	}
@@ -29,10 +33,17 @@ public class EnemyDrops : MonoBehaviour {
 			cube.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward*300f);
 		}
 
+		float upgradePointRando=Random.Range (0f,1f);
+		if(upgradePointRando<=upgradePointDropRate){
+			Instantiate(upgradePoint,transform.position,Quaternion.identity);
+		}
+		else{
 		float dropRando=Random.Range (0f,1f);
 		if(dropRando<=randomUpgradeDropRate){
 		int rando= Random.Range(0,possibleUpgrades.Count);
 		Instantiate(possibleUpgrades[rando],transform.position,Quaternion.identity);
+			}
 		}
+
 	}
 }

@@ -9,22 +9,27 @@ public class PlayerUpgradeManager : MonoBehaviour {
 
 	public List<GameObject> currentUpgrades = new List<GameObject>();
 
-	public float startShotDamage,startShotArc,startShotRange,startShotSpeed,startMoveSpeed,startBarSize,startShotVamp;
-	public int startNumShots;
 
-	float currentShotDamage,currentShotArc,currentShotRange,currentShotSpeed,currentMoveSpeed,currentBarSize,currentShotVamp;
-	int currentNumShots;
+	public int currentUpgradePoints=5;
+
+	public float startShotDamage,startShotArc,startShotRange,startShotSpeed,startMoveSpeed,startBarSize;
+	public int startNumShots,startNumPickups;
+
+	public GameObject dropManager;
+	float currentShotDamage,currentShotArc,currentShotRange,currentShotSpeed,currentMoveSpeed,currentBarSize;
+	int currentNumShots,currentNumPickups;
 
 	void Start () {
+		dropManager=GameObject.Find("DropManager");
 
 		currentMoveSpeed=startMoveSpeed;
 		currentNumShots=startNumShots;
 		currentShotDamage=startShotDamage;
 		currentShotSpeed=startShotSpeed;
 		currentShotArc=startShotArc;
-		currentShotVamp=startShotVamp;
 		currentShotRange=startShotRange;
 		currentBarSize=startBarSize;
+		currentNumPickups=startNumPickups;
 
 
 		SetTheStats();
@@ -32,6 +37,7 @@ public class PlayerUpgradeManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 	}
 
 
@@ -44,27 +50,28 @@ public class PlayerUpgradeManager : MonoBehaviour {
 		float tempMoveSpeed=0f;
 		float tempBarSize=0f;
 		float tempShotVamp=0f;
+		int tempNumPickups=0;
 		int tempNumShots=0; 
 		foreach(GameObject upgrade in currentUpgrades){
 			UpgradeStats stats= upgrade.GetComponent<UpgradeStats>();
 			tempMoveSpeed+=stats.moveSpeedBonus;
-			tempNumShots+=stats.numShotsBonus;
 			tempShotDamage+=stats.shotDamageBonus;
 			tempShotSpeed+=stats.shotSpeedBonus;
 			tempShotArc+=stats.shotArcBonus;
-			tempShotVamp+=stats.shotVampBonus;
 			tempShotRange+=stats.shotRangeBonus;
 			tempBarSize+=stats.barSizeBonus;
+			tempNumShots+=stats.numShotsBonus;
+			tempNumPickups+=stats.numPickupsBonus;
 		}
 
 		currentMoveSpeed=tempMoveSpeed+startMoveSpeed;
-		currentNumShots=tempNumShots+startNumShots;
 		currentShotDamage=tempShotDamage+startShotDamage;
 		currentShotSpeed=tempShotSpeed+startShotSpeed;
 		currentShotArc=tempShotArc+startShotArc;
-		currentShotVamp=tempShotVamp+startShotVamp;
 		currentShotRange=tempShotRange+startShotRange;
 		currentBarSize=tempBarSize+startBarSize;
+		currentNumShots=tempNumShots+startNumShots;
+		currentNumPickups=tempNumPickups+startNumPickups;
 	}
 
 
@@ -78,9 +85,9 @@ public class PlayerUpgradeManager : MonoBehaviour {
 		GetComponent<PlayerAttacks>().bulletDamage=currentShotDamage;
 		GetComponent<PlayerAttacks>().bulletSpeed=currentShotSpeed;
 		GetComponent<PlayerAttacks>().shotArc=currentShotArc;
-		GetComponent<PlayerAttacks>().shotVamp=currentShotVamp;
 		GetComponent<PlayerAttacks>().maxRange=currentShotRange;
 		GetComponent<PlayerMoveQueueing>().maxEnergy=currentBarSize;
 		GetComponent<PlayerMoveQueueing>().currentEnergy=currentBarSize;
+		dropManager.GetComponent<DropManager>().numPickupsPerEnemy=currentNumPickups;
 	}
 }

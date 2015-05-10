@@ -19,6 +19,7 @@ public class DamagePlayer : MonoBehaviour {
 
 			if(!col.gameObject.GetComponent<PlayerMoveQueueing>().timeStopped){	
 				Instantiate(hitParticle,transform.position,Quaternion.Euler(90f,0f,0f));
+				Camera.main.gameObject.GetComponent<CamShake>().TriggerShake();
 			col.gameObject.GetComponent<PlayerMoveQueueing>().currentEnergy-=singleBulletDamage;
 			Destroy(gameObject);
 			}

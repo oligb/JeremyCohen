@@ -5,6 +5,11 @@ public class DropManager : MonoBehaviour {
 
 	public float randomEnemyDropRate=.05f;
 	public List<GameObject> possibleDropBag=new List<GameObject>();
+	public int numPickupsPerEnemy;
+
+	public int totalUpgradesForThisLevel;
+	public float upgradePointDropRate=.25f;
+	public GameObject upgradePoint;
 	// Use this for initialization
 	void Start () {
 	
@@ -14,4 +19,12 @@ public class DropManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+	public void NewLevel(){
+
+
+	}
+
+
 }

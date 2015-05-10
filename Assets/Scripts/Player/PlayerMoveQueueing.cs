@@ -13,17 +13,18 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	public GameObject overlay;
 	public GameObject ghostHolder;
 	public GameObject barStuffHolder;
+	public GameObject coneObject;
 
-	public float shotArcToPredictorModifier=5f;
 	public float stepSize=5f;
 	public float stepDelay=1f;
 	public float delayWhileShooting=2f;
+	public Vector3 currentTarget;
 
 	Vector3 shootSignalVector=new Vector3(100f,100f,100f);
 	PlayerController playerControl;
 	PlayerAttacks playerAttack; 
 	int currentShotIterator=0;
-
+	LookatMouse triangleLook;
 
 	public bool queueing=false;
 	public bool playingBack=false;
@@ -39,6 +40,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 	float energyAtQueStart;
 
 	void Start () {
+		triangleLook=GetComponentInChildren<LookatMouse>();
 		barStuffHolder=GameObject.Find("StuffHolder");
 		overlay=GameObject.Find("Overlay");
 		playerControl=GetComponent<PlayerController>();
@@ -59,8 +61,8 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 
 		if(queueing){
-			if(currentEnergy-energyDepletionRate<=1f &&currentEnergy<=1f){
-				GetComponent<Rigidbody>().drag=50000;
+			if(currentEnergy-energyDepletionRate<=energyDepletionRate &&currentEnergy<=1f){
+				GetComponent<Rigidbody>().velocity=Vector3.zero;
 				playerControl.canMove=false;
 			}
 			else{
@@ -107,8 +109,8 @@ public class PlayerMoveQueueing: MonoBehaviour {
 			shotTargets.Clear();
 			queueing=false;
 
-			foreach(GameObject line in placeholderLines){
-				Destroy(line);
+			foreach(GameObject cone in placeholderLines){
+				Destroy(cone);
 			}
 			placeholderLines.Clear();
 
@@ -138,14 +140,14 @@ public class PlayerMoveQueueing: MonoBehaviour {
 				targetPos.y=transform.position.y;
 				shotTargets.Add(targetPos);
 
-				GameObject line= Instantiate(lineObject,transform.position,Quaternion.identity) as GameObject;
-				Vector3 shotRangeForLineRenderer=(targetPos-transform.position).normalized*playerAttack.maxRange +transform.position;
-				LineRenderer shotPredictor = line.GetComponent<LineRenderer>();
-				shotPredictor.SetPosition(0,transform.position);
-				shotPredictor.SetPosition(1,shotRangeForLineRenderer);
-				float shotAngle=playerAttack.shotArc;
-				shotPredictor.SetWidth(.1f,shotAngle*shotArcToPredictorModifier);
-				placeholderLines.Add(line);
+			
+
+				GameObject cone= Instantiate(coneObject,transform.position,Quaternion.identity) as GameObject;
+					cone.transform.LookAt(targetPos);
+					cone.GetComponentInChildren<GenerateArc>().shotArc=playerAttack.shotArc;
+					cone.GetComponentInChildren<GenerateArc>().radius=playerAttack.maxRange;
+					cone.GetComponentInChildren<GenerateArc>().GenerateCone();
+					placeholderLines.Add(cone);
 
 
 				}
@@ -170,6 +172,10 @@ public class PlayerMoveQueueing: MonoBehaviour {
 
 
 	public IEnumerator PlaybackQue(){
+		if(shotTargets.Count>0){
+		triangleLook.Target(shotTargets[0]);
+		}
+
 		GameObject trailClone =GameObject.Find("trailHolder(Clone)");
 		trailClone.transform.parent=null; 
 		Destroy(GameObject.Find("GhostHolder(Clone)"));
@@ -179,15 +185,20 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		playerControl.canMove=false;
 		int i=0;
 		int numSteps=queuedStepList.Count;
-
 		while(i<=numSteps-1){
 		
 			if(queuedStepList[i]==shootSignalVector){
+				triangleLook.Target(shotTargets[currentShotIterator]);
+
+				yield return new WaitForSeconds(delayWhileShooting/2);
 				playerAttack.Shoot(transform.position,shotTargets[currentShotIterator]);
+
 				Destroy(placeholderLines[currentShotIterator].gameObject);
+				yield return new WaitForSeconds(delayWhileShooting/2);
 				currentShotIterator++;
 				i++;
-				yield return new WaitForSeconds(delayWhileShooting);
+
+
 			}
 			else{
 				transform.position=queuedStepList[i];
@@ -211,7 +222,7 @@ public class PlayerMoveQueueing: MonoBehaviour {
 		Mesh ghostMesh = GetComponent<MeshFilter>().mesh;
 		GameObject ghostInPlace = Instantiate(ghostHolder,transform.position,Quaternion.identity) as GameObject;
 		ghostInPlace.GetComponent<MeshFilter>().mesh=ghostMesh;
-		ghostInPlace.transform.localScale=transform.localScale;
+		ghostInPlace.transform.localScale=transform.localScale*.9f;
 
 		GameObject trail= Instantiate(trailHolder,transform.position,Quaternion.identity) as GameObject;
 		trail.transform.parent=gameObject.transform;

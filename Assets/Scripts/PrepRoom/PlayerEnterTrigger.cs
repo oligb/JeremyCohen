@@ -32,14 +32,14 @@ public class PlayerEnterTrigger : MonoBehaviour {
 	
 	
 	void OnTriggerEnter(Collider col){
-		if(!onMenu && !lerping &&col.tag=="Player"){
+		if(!onMenu && !lerping &&col.tag=="Player" && !player.GetComponent<PlayerMoveQueueing>().timeStopped){
 			lerping=true;
 			StartCoroutine("ZoomIn");
 
 		}
 	}	
 	void OnTriggerExit(Collider col){
-		if(onMenu && !lerping &&col.tag=="Player"){
+		if(onMenu && !lerping &&col.tag=="Player" && !player.GetComponent<PlayerMoveQueueing>().timeStopped){
 			if(col.gameObject==player){
 				targetPosCam=player.position;
 			}
@@ -50,7 +50,7 @@ public class PlayerEnterTrigger : MonoBehaviour {
 	}
 	
 	IEnumerator ZoomIn(){
-
+		player.GetComponentInChildren<CamMovement>().canMoveCam=false;
 		workbench.GetComponent<ShowWorkbenchUpgrades>().ShowUpgrades();
 		player.gameObject.GetComponent<PlayerController>().canMove=false;
 		player.gameObject.GetComponent<PlayerController>().GetComponent<Rigidbody>().velocity*=.5f;
@@ -100,6 +100,7 @@ public class PlayerEnterTrigger : MonoBehaviour {
 		onMenu=false;
 		workbench.GetComponent<ShowWorkbenchUpgrades>().DestroyUpgrades();
 		player.gameObject.GetComponent<PlayerUpgradeManager>().SetTheStats();
+		player.GetComponentInChildren<CamMovement>().canMoveCam=true;
 		yield break;
 	}
 	

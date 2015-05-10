@@ -43,28 +43,7 @@ public class ClickableUpgrades : MonoBehaviour {
 	}
 
 	public void SetTextureFromUpgrade(){
-		UpgradeType types=actualUpgradeObject.GetComponent<UpgradeStats>().types;
-		switch(types){
-		case UpgradeType.ShotDamage:
-			upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().ShotDamage;
-			break;
-		case UpgradeType.MoveSpeed:
-			upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().MoveSpeed;
-			break;
-		case UpgradeType.ShotArc:
-			upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().ShotArc;
-			break;
-		case UpgradeType.ShotRange:
-			upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().ShotRange;
-			break;
-		case UpgradeType.ShotSpeed:
-			upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().ShotSpeed;
-			break;
-		case UpgradeType.NumShots:
-			upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().NumShots;
-			break;
-		}
-		
+		upgradeTexture=actualUpgradeObject.GetComponent<UpgradeStats>().upgradeTexture;
 		GetComponent<MeshRenderer>().materials[0].SetTexture(0,upgradeTexture);
 	}
 

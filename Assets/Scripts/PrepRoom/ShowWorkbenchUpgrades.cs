@@ -23,7 +23,7 @@ public class ShowWorkbenchUpgrades : MonoBehaviour {
 		availableUpgrades = manager.availableUpgrades;
 		currentUpgrades=manager.currentUpgrades;
 		int numUpgrades=availableUpgrades.Count;
-
+		Debug.Log(availableUpgrades);
 		if(numUpgrades<20){
 			margins=.1f;
 		}

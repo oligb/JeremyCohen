@@ -44,7 +44,7 @@ public class PyramidEnemyControl : MonoBehaviour
 		RaycastHit hit;
 
 		if (Physics.Raycast (playerRay, out hit, visionDistance)) {
-			if (hit.collider.gameObject == player.gameObject) {
+			if (hit.collider.gameObject == player.gameObject &&  !player.GetComponent<PlayerMoveQueueing> ().timeStopped) {
 				canSeePlayer = true;
 
 				Vector3 fwd = transform.TransformDirection (Vector3.forward);
