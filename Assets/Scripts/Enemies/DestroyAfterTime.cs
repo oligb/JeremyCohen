@@ -29,6 +29,10 @@ public class DestroyAfterTime : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision col){
 
+		if(col.gameObject.name.StartsWith("Armor")){
+			Destroy(gameObject);
+		}
+
 		if(col.gameObject.GetComponent<DamagePlayer>() != null){
 			Destroy(col.gameObject);
 		}
