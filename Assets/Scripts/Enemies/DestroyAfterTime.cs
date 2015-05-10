@@ -4,6 +4,7 @@ using System.Collections;
 public class DestroyAfterTime : MonoBehaviour {
 
 	// Use this for initialization
+	public bool isActive = true;
 	public float startTime=0f;
 	public float lifeTime=5f;
 	public Vector3 startPos, endPos;
@@ -36,7 +37,7 @@ public class DestroyAfterTime : MonoBehaviour {
 		if(col.gameObject.GetComponent<DamagePlayer>() != null){
 			Destroy(col.gameObject);
 		}
-		else if(col.gameObject.GetComponent<TakeDamage>() !=null){
+		else if(isActive && col.gameObject.GetComponent<TakeDamage>() !=null){
 			col.gameObject.GetComponent<TakeDamage>().enemyHealth-=shotDamage;
 
 		}
