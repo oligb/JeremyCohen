@@ -17,8 +17,10 @@ public class PlayerAttacks : MonoBehaviour {
 	public float maxRange=10f;
 
 	SfxrSynth shotSynth;
+	SfxrSynth hitSynth;
 	void Start () {
 		PlayShotSound();
+		PlayHitSound();
 	}
 	
 	// Update is called once per frame
@@ -57,11 +59,24 @@ public class PlayerAttacks : MonoBehaviour {
 			shotSynth.SetParentTransform(Camera.main.transform);
 
 		float ti = Time.realtimeSinceStartup;
-			shotSynth.CacheMutations(15, 0.03f);
+			shotSynth.CacheMutations(15, 0.05f);
 	}
 
 		shotSynth.PlayMutated();
 
+	}
+	public void PlayHitSound(){
+		if (hitSynth == null) {
+			hitSynth = new SfxrSynth();
+			hitSynth.parameters.SetSettingsString("3,.05,,.227,.5372,.2318,.3,.419,,-.3868,,,,,,,,,,,,,.5877,,,1,,,,,,");
+			hitSynth.SetParentTransform(Camera.main.transform);
+			
+			float ti = Time.realtimeSinceStartup;
+			hitSynth.CacheMutations(15, 0.06f);
+		}
+		
+		hitSynth.PlayMutated();
+		
 	}
 
 
