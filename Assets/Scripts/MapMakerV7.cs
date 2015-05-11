@@ -76,10 +76,14 @@ public class MapMakerV7 : MonoBehaviour {
 	void Start () {
 
 
+
 		levelManager=GameObject.Find("LevelManager");
 		levelManager.GetComponent<LevelManager>().currentMapmaker = gameObject;
 
 		level = levelManager.GetComponent<LevelManager>().level;
+
+		maxXTiles = levelManager.GetComponent<LevelManager>().maxXTiles;
+		maxYTiles = levelManager.GetComponent<LevelManager>().maxYTiles;
 
 		wallTilesList.Add(walltile);
 		wallTilesList.Add(TripletWall);
