@@ -32,7 +32,7 @@ public class MoveToBar : MonoBehaviour {
 
 
 	IEnumerator SwoopToBar(){
-		PlayShotSound();
+		player.GetComponent<PlayerAttacks>().PlayPickupSound();
 		Vector3 startPos = transform.position;
 		Vector3 startScale= transform.localScale;
 		//Vector3 targetPos= secretTarget.position;
@@ -49,10 +49,4 @@ public class MoveToBar : MonoBehaviour {
 		yield break;
 	}
 
-	public void PlayShotSound(){
-		shotSynth = new SfxrSynth();
-		shotSynth.parameters.SetSettingsString("1,.05,,.2835,,.3565,.3,.2078,,.3427,,,,,,,,,,,,,.5043,,,1,,,,,,");
-		shotSynth.Play();
-		
-	}
 }

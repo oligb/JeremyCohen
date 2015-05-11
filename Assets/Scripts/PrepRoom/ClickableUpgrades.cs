@@ -46,7 +46,32 @@ public class ClickableUpgrades : MonoBehaviour {
 			onMenu=false;
 		}
 		if(mouseOver){
-		transform.localScale=initScale*scaleFactor;
+
+			gameObject.GetComponent<Tooltip>().statName = actualUpgradeObject.GetComponent<UpgradeStats>().types.ToString();
+			transform.localScale = initScale * scaleFactor;
+
+			if(actualUpgradeObject.GetComponent<UpgradeStats>().shotDamageBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().shotDamageBonus;
+
+			} else if(actualUpgradeObject.GetComponent<UpgradeStats>().moveSpeedBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().moveSpeedBonus;
+
+			}else if(actualUpgradeObject.GetComponent<UpgradeStats>().shotArcBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().shotArcBonus;
+
+			}else if(actualUpgradeObject.GetComponent<UpgradeStats>().shotRangeBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().shotRangeBonus;
+
+			}else if(actualUpgradeObject.GetComponent<UpgradeStats>().shotSpeedBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().shotSpeedBonus;
+
+			}else if(actualUpgradeObject.GetComponent<UpgradeStats>().numPickupsBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().numPickupsBonus;
+
+			}else if(actualUpgradeObject.GetComponent<UpgradeStats>().numShotsBonus != 0){
+				gameObject.GetComponent<Tooltip>().statValue = actualUpgradeObject.GetComponent<UpgradeStats>().numShotsBonus;
+			}
+
 		}
 		else{
 		transform.localScale=initScale;
@@ -59,7 +84,7 @@ public class ClickableUpgrades : MonoBehaviour {
 	}
 
 	public void Enable(){
-
+		player.GetComponent<PlayerAttacks>().PlayBeepSound();
 		upgradeHighlightChild.enabled=true;
 		playerUpgrades.currentUpgrades.Add(actualUpgradeObject);
 		playerUpgrades.usedUpgradePoints+= actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost;
@@ -67,6 +92,7 @@ public class ClickableUpgrades : MonoBehaviour {
 	}
 	public void Disable(){
 		upgradeHighlightChild.enabled=false;
+		player.GetComponent<PlayerAttacks>().PlayBoopSound();
 		playerUpgrades.currentUpgrades.Remove(actualUpgradeObject);
 		playerUpgrades.usedUpgradePoints-= actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost;
 		playerUpgrades.UpdateTheStats();
@@ -112,6 +138,7 @@ public class ClickableUpgrades : MonoBehaviour {
 					}
 					else{
 						StartCoroutine("ShakeUpgrade");
+						player.GetComponent<PlayerAttacks>().PlayShakeSound();
 					}
 
 				}

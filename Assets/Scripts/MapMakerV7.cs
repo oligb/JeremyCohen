@@ -348,12 +348,12 @@ public class MapMakerV7 : MonoBehaviour {
 					//	Debug.Log("Exit instanciate should run.");
 					exitInstance = Instantiate(exit, position, Quaternion.identity) as GameObject;
 					tempConvexHullList.Add(exitInstance);
+					tempConvexHullList.Add(exitInstance);
 					exitSpawned = true;
 				}
 			}
 		}
-		
-		
+
 		roomNumber++;
 		
 	}

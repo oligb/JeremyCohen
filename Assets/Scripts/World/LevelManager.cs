@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour {
 	
 
 	public void IncreaseDifficulty(){
-		numberOfEnemies = numberOfEnemies + 0.01f;
+		numberOfEnemies = numberOfEnemies + 0.012f;
 
 		pyramidSpeed = pyramidSpeed + level / 30f;
 		pyramidHealth = pyramidHealth + level;

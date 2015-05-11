@@ -7,7 +7,7 @@ public enum UpgradeType { ShotDamage,MoveSpeed,ShotArc,ShotRange,ShotSpeed,NumSh
 public class UpgradeStats : MonoBehaviour {
 
 	// Use this for initialization
-	public int upgradeCost=5;
+	public int upgradeCost = 5;
 
 	public UpgradeType types;
 	public Texture ShotDamage,MoveSpeed,ShotArc,ShotRange,ShotSpeed,NumShots,NumPickups;
@@ -52,10 +52,6 @@ public class UpgradeStats : MonoBehaviour {
 
 		GetComponent<MeshRenderer>().materials[0].SetTexture(0,upgradeTexture);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 
 }

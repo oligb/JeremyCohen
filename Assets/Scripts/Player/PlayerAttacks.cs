@@ -18,9 +18,17 @@ public class PlayerAttacks : MonoBehaviour {
 
 	SfxrSynth shotSynth;
 	SfxrSynth hitSynth;
+	SfxrSynth pickupSynth;
+	SfxrSynth beepSynth;
+	SfxrSynth boopSynth;
+	SfxrSynth shakeSynth;
+
 	void Start () {
 		PlayShotSound();
 		PlayHitSound();
+		PlayPickupSound();
+		PlayBeepSound();
+		PlayBoopSound();
 	}
 	
 	// Update is called once per frame
@@ -79,6 +87,36 @@ public class PlayerAttacks : MonoBehaviour {
 		
 	}
 
+	
+	public void PlayPickupSound(){
+		
+		if (pickupSynth == null) {
+		pickupSynth = new SfxrSynth();
+		pickupSynth.parameters.SetSettingsString("1,.05,,.2835,,.3565,.3,.2078,,.3427,,,,,,,,,,,,,.5043,,,1,,,,,,");
+			pickupSynth.SetParentTransform(Camera.main.transform);
+			float ti = Time.realtimeSinceStartup;
+			pickupSynth.CacheMutations(15, 0.08f);
+		}
 
+		pickupSynth.PlayMutated();
+	}
 
+	public void PlayBeepSound(){
+		beepSynth = new SfxrSynth();
+		
+		beepSynth.parameters.SetSettingsString("0,.237,,.0546,.5509,.2362,.3,.293,,,,,,,,,,,,,,,,,,1,,,,,,");
+		beepSynth.Play();
+
+	}
+	public void PlayBoopSound(){
+			boopSynth = new SfxrSynth();
+			boopSynth.parameters.SetSettingsString("0,.242,,.1244,,.0937,.3,.195,,,,,,,,,,,,,.5195,,,,,1,,,.1,,,");
+		boopSynth.Play();
+	}
+
+	public void PlayShakeSound(){
+		shakeSynth = new SfxrSynth();
+		shakeSynth.parameters.SetSettingsString("1,.265,,.1651,,.1334,.3,.185,,.4163,,,,,,,,,,,.5034,,.768,,,1,,,,,,-.507");
+		shakeSynth.Play();
+	}
 }
