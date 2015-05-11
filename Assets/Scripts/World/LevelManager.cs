@@ -13,8 +13,8 @@ public class LevelManager : MonoBehaviour {
 	public float numberOfEnemies = 0.08f;
 	public float pyramidBulletSpeed = 150;
 
-	public float maxXTiles = 10;
-	public float maxYTiles = 10;
+	public float maxXTiles = 10f;
+	public float maxYTiles = 10f;
 
 	public float armoredHealth = 10;
 	public float armoredSpeed = 5;

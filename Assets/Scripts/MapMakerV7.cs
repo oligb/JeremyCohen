@@ -24,9 +24,9 @@ public class MapMakerV7 : MonoBehaviour {
 	public int maximumPathCount = 3;
 	public float pathmakerChance = 0.2f;
 	public float wallMakerChance = 0.1f;
-	public int maxXTiles = 10;
+	public float maxXTiles = 10f;
 	public int minXTiles = 5;
-	public int maxYTiles = 10;
+	public float maxYTiles = 10f;
 	public int minYTiles = 5;
 	public float enemySpawnChance = .08f;
 	public int maxEnemiesSpawned = 100;
@@ -219,8 +219,8 @@ public class MapMakerV7 : MonoBehaviour {
 		int randomDirectionNumber;
 		List<int> pathDirectionList = new List<int>();;
 		
-		int verticalTileCount =  Random.Range(minYTiles,maxYTiles);
-		int horizontalTileCount = Random.Range(minXTiles,maxXTiles);
+		float verticalTileCount =  Random.Range(minYTiles,maxYTiles);
+		float horizontalTileCount = Random.Range(minXTiles,maxXTiles);
 		Vector3 position = Vector3.zero;
 		
 		Vector3 spawnerPosition = spawnGridPos;

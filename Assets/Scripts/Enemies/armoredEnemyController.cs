@@ -114,11 +114,13 @@ public class armoredEnemyController : MonoBehaviour
 	
 	void attack ()
 	{
-		RaycastHit hit;
-		if (Physics.Raycast (transform.position, transform.forward, out hit)) {
-			if (hit.collider.gameObject.tag == "Player") {
-				Camera.main.gameObject.GetComponent<CamShake>().TriggerShake();
-				playerCharacter.GetComponent<PlayerMoveQueueing>().currentEnergy-= attackDamage;
+		if(!player.GetComponent<PlayerMoveQueueing>().timeStopped){
+			RaycastHit hit;
+			if (Physics.Raycast (transform.position, transform.forward, out hit)) {
+				if (hit.collider.gameObject.tag == "Player") {
+					Camera.main.gameObject.GetComponent<CamShake>().TriggerShake();
+					playerCharacter.GetComponent<PlayerMoveQueueing>().currentEnergy-= attackDamage;
+				}
 			}
 		}
 	}
