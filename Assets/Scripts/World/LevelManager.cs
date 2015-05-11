@@ -9,10 +9,15 @@ public class LevelManager : MonoBehaviour {
 	public int pyramidNumOfBullets = 3;
 	public float numberOfEnemies = 0.08f;
 	public float pyramidBulletSpeed = 150;
+
+	public float armoredHealth = 10;
+	public float armoredSpeed = 5;
+
+	public float basicHealth = 10;
+	public float basicSpeed = 10;
+
 	public GameObject currentMapmaker;
-	public GameObject tempPyramid;
-	public GameObject armoredEnemeyPrefab, rangedEnemyPrefab;
-	public GameObject armoredEnemyInstance, rangedEnemyInstance;
+
 	// Use this for initialization
 	void Start () {
 
@@ -27,11 +32,17 @@ public class LevelManager : MonoBehaviour {
 
 	public void IncreaseDifficulty(){
 		numberOfEnemies = numberOfEnemies + 0.01f;
-		pyramidSpeed = pyramidSpeed + level / 20f;
+
+		pyramidSpeed = pyramidSpeed + level / 30f;
 		pyramidHealth = pyramidHealth + level;
 		pyramidNumOfBullets = pyramidNumOfBullets + 1;
 		pyramidBulletSpeed = pyramidBulletSpeed + pyramidBulletSpeed / 20f;
 
+		armoredHealth = armoredHealth + level;
+		armoredSpeed = armoredSpeed + armoredSpeed / 10;
+
+		basicHealth = basicHealth + level;
+		basicSpeed = basicSpeed + basicSpeed / 10;
 
 	}
 }

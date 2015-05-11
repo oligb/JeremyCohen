@@ -13,7 +13,7 @@ public class MapMakerV7 : MonoBehaviour {
 	public GameObject LWall, TripletWall, SquareWall;
 	
 	List<GameObject> wallTilesList = new List<GameObject>();
-
+	float level = 0;
 	bool hullChecked = false;
 	bool exitCorrectPosition = false;
 
@@ -36,6 +36,7 @@ public class MapMakerV7 : MonoBehaviour {
 	public GameObject explosiveEnemy;
 	public GameObject chasingEnemy;
 	public GameObject armoredEnemy;
+	public GameObject basicEnemy;
 	// float to check what to instanciate
 	float randomNumber;
 	int loopbreaker = 0;
@@ -74,8 +75,12 @@ public class MapMakerV7 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+
 		levelManager=GameObject.Find("LevelManager");
 		levelManager.GetComponent<LevelManager>().currentMapmaker = gameObject;
+
+		level = levelManager.GetComponent<LevelManager>().level;
+
 		wallTilesList.Add(walltile);
 		wallTilesList.Add(TripletWall);
 		wallTilesList.Add(LWall);
@@ -281,25 +286,56 @@ public class MapMakerV7 : MonoBehaviour {
 						
 						pathMaker (activePathSpawnPosition, pathDirection);
 					}
-
+					GameObject enemyTest;
 					if(randomNumber < enemySpawnChance){
 						if ( enemyCount < maxEnemiesSpawned ) {
-							//pyramidEnemy = LevelManager.GetComponent<LevelManager>().rangedEnemyInstance;
+							float enemyRandomCount = Random.value;
+							if(level == 1){
+								enemyTest = Instantiate(basicEnemy,position,Quaternion.identity) as GameObject;
+							} else if ( level == 2){
+								if(enemyRandomCount < 0.3){
+									enemyTest = Instantiate(pyramidEnemy,position,Quaternion.identity) as GameObject;
+									
+									enemyTest.GetComponent<PyramidEnemyControl>().moveSpeed = levelManager.GetComponent<LevelManager>().pyramidSpeed;
+									enemyTest.GetComponent<PyramidEnemyControl>().numEnemyShots = levelManager.GetComponent<LevelManager>().pyramidNumOfBullets;
+									enemyTest.GetComponent<PyramidEnemyControl>().enemyBulletSpeed = levelManager.GetComponent<LevelManager>().pyramidBulletSpeed;
+									enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().pyramidHealth;
+								} else{
+									enemyTest = Instantiate(basicEnemy,position,Quaternion.identity) as GameObject;
+								}
+							} else {
+								if(enemyRandomCount < 0.3){
+									enemyTest = Instantiate(pyramidEnemy,position,Quaternion.identity) as GameObject;
+									
+									enemyTest.GetComponent<PyramidEnemyControl>().moveSpeed = levelManager.GetComponent<LevelManager>().pyramidSpeed;
+									enemyTest.GetComponent<PyramidEnemyControl>().numEnemyShots = levelManager.GetComponent<LevelManager>().pyramidNumOfBullets;
+									enemyTest.GetComponent<PyramidEnemyControl>().enemyBulletSpeed = levelManager.GetComponent<LevelManager>().pyramidBulletSpeed;
+									enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().pyramidHealth;
+								} else if ( enemyRandomCount < 0.5){
+									enemyTest = Instantiate(armoredEnemy,position,Quaternion.identity) as GameObject;
 
-							GameObject enemyTest = Instantiate(pyramidEnemy,position,Quaternion.identity) as GameObject;
+									enemyTest.GetComponent<armoredEnemyController>().speed = levelManager.GetComponent<LevelManager>().armoredSpeed;
+									enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().armoredHealth;
 
-							enemyTest.GetComponent<PyramidEnemyControl>().moveSpeed = levelManager.GetComponent<LevelManager>().pyramidSpeed;
-							enemyTest.GetComponent<PyramidEnemyControl>().numEnemyShots = levelManager.GetComponent<LevelManager>().pyramidNumOfBullets;
-							enemyTest.GetComponent<PyramidEnemyControl>().enemyBulletSpeed = levelManager.GetComponent<LevelManager>().pyramidBulletSpeed;
-							enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().pyramidHealth;
+
+								} else{
+									enemyTest = Instantiate(basicEnemy,position,Quaternion.identity) as GameObject;
+								
+									enemyTest.GetComponent<armoredEnemyController>().speed = levelManager.GetComponent<LevelManager>().basicSpeed;
+									enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().basicHealth;
+								}
+							}
+
+
+
 
 							tempConvexHullList.Add(enemyTest);
-							//enemyTest.name = "pyramid(Clone)";
+
 							enemyTest.transform.Translate(Vector3.up*2);
 							enemyCount += 1;
 						}
 					}
-				}else if (notInCorner && randomNumber < 1f){
+				} else if (notInCorner && randomNumber < 1f){
 					currentObject = Instantiate(floortile, position, gameObject.transform.rotation) as GameObject;
 					currentObject = Instantiate(wallTilesList[Random.Range(0,wallTilesList.Count)], position, Quaternion.Euler(0,90 * Random.Range(0,3),0) ) as GameObject;
 					convexHullList.Add(currentObject);
