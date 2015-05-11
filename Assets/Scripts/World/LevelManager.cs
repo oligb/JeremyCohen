@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class LevelManager : MonoBehaviour {
+
+	public GameObject text;
 
 	public float level = 1;
 	public float pyramidHealth = 15;
@@ -20,6 +23,7 @@ public class LevelManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		text.GetComponent<TextMesh>().text = "Level: " + level.ToString();
 
 		//tempPyramid = currentMapmaker.GetComponent<MapMakerV7>().pyramidEnemy;
 		//Debug.Log(rangedEnemyInstance.name);
@@ -43,6 +47,8 @@ public class LevelManager : MonoBehaviour {
 
 		basicHealth = basicHealth + level;
 		basicSpeed = basicSpeed + basicSpeed / 10;
+
+		text.GetComponent<TextMesh>().text = "Level: " + level.ToString();
 
 	}
 }
