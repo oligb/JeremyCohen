@@ -9,6 +9,7 @@ public class MoveToBar : MonoBehaviour {
 	public float endScale=.1f;
 	public GameObject player;
 	public float energyRestored=5f;
+	SfxrSynth shotSynth;
 
 	void Start () {
 		player=GameObject.FindWithTag("Player");
@@ -31,6 +32,7 @@ public class MoveToBar : MonoBehaviour {
 
 
 	IEnumerator SwoopToBar(){
+		PlayShotSound();
 		Vector3 startPos = transform.position;
 		Vector3 startScale= transform.localScale;
 		//Vector3 targetPos= secretTarget.position;
@@ -45,5 +47,12 @@ public class MoveToBar : MonoBehaviour {
 		player.GetComponent<PlayerMoveQueueing>().currentEnergy+=energyRestored;
 		Destroy(gameObject);
 		yield break;
+	}
+
+	public void PlayShotSound(){
+		shotSynth = new SfxrSynth();
+		shotSynth.parameters.SetSettingsString("1,.05,,.2835,,.3565,.3,.2078,,.3427,,,,,,,,,,,,,.5043,,,1,,,,,,");
+		shotSynth.Play();
+		
 	}
 }

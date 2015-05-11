@@ -25,6 +25,7 @@ public class PyramidEnemyControl : MonoBehaviour
 	public float rotateSpeed = 1f;
 	public float timeStopRotateSpeed = .5f;
 	public LayerMask bulletMask;
+	SfxrSynth shotSynth;
 
 	void Start ()
 	{
@@ -137,6 +138,7 @@ public class PyramidEnemyControl : MonoBehaviour
 
 	void Shoot ()
 	{
+		PlayShotSound();
 		//Debug.Log("called");
 		for (int i=0; i<numEnemyShots; i++) {
 
@@ -150,6 +152,15 @@ public class PyramidEnemyControl : MonoBehaviour
 			bullet.GetComponent<BulletSpeedControl> ().startSpeed = bulletForce.z;
 		}
 	}
+
+	
+	public void PlayShotSound(){
+		shotSynth = new SfxrSynth();
+		shotSynth.parameters.SetSettingsString("2,.05,,.2149,,.2297,.3,.382,.0859,-.3718,,,,,,,,,,,.8283,-.3336,,,,1,,,,,,");
+		shotSynth.Play();
+		
+	}
+
 
 	void FixedUpdate ()
 	{
