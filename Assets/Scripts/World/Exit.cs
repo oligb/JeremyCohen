@@ -26,7 +26,7 @@ public class Exit : MonoBehaviour {
 
 			col.gameObject.GetComponent<PlayerStateControls>().MoveToPrepRoom();
 			mapMaker.GetComponent<MapMakerV7>().DestroyTheWorld();
-
+			Destroy(mapMaker);
 			TeleportSound();
 		}
 	}
