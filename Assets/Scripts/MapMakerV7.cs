@@ -16,7 +16,9 @@ public class MapMakerV7 : MonoBehaviour {
 
 	bool hullChecked = false;
 	bool exitCorrectPosition = false;
-	
+
+	public GameObject levelManager;
+	public GameObject tempPyramid;
 	// The tuning knobs.
 	public int maxPathLength = 2;
 	public int maximumPathCount = 3;
@@ -64,9 +66,16 @@ public class MapMakerV7 : MonoBehaviour {
 		convexHullList.Clear();
 
 	}
+
+	void Awake(){
+
+
+	}
 	// Use this for initialization
 	void Start () {
-		
+
+		levelManager=GameObject.Find("LevelManager");
+		levelManager.GetComponent<LevelManager>().currentMapmaker = gameObject;
 		wallTilesList.Add(walltile);
 		wallTilesList.Add(TripletWall);
 		wallTilesList.Add(LWall);
@@ -272,11 +281,20 @@ public class MapMakerV7 : MonoBehaviour {
 						
 						pathMaker (activePathSpawnPosition, pathDirection);
 					}
-					
+
 					if(randomNumber < enemySpawnChance){
 						if ( enemyCount < maxEnemiesSpawned ) {
+							//pyramidEnemy = LevelManager.GetComponent<LevelManager>().rangedEnemyInstance;
+
 							GameObject enemyTest = Instantiate(pyramidEnemy,position,Quaternion.identity) as GameObject;
 
+							enemyTest.GetComponent<PyramidEnemyControl>().moveSpeed = levelManager.GetComponent<LevelManager>().pyramidSpeed;
+							enemyTest.GetComponent<PyramidEnemyControl>().numEnemyShots = levelManager.GetComponent<LevelManager>().pyramidNumOfBullets;
+							enemyTest.GetComponent<PyramidEnemyControl>().enemyBulletSpeed = levelManager.GetComponent<LevelManager>().pyramidBulletSpeed;
+							enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().pyramidHealth;
+
+							tempConvexHullList.Add(enemyTest);
+							//enemyTest.name = "pyramid(Clone)";
 							enemyTest.transform.Translate(Vector3.up*2);
 							enemyCount += 1;
 						}
@@ -293,6 +311,7 @@ public class MapMakerV7 : MonoBehaviour {
 				if ( roomNumber == 0 && randomNumber < .2f && !exitSpawned){
 					//	Debug.Log("Exit instanciate should run.");
 					exitInstance = Instantiate(exit, position, Quaternion.identity) as GameObject;
+					tempConvexHullList.Add(exitInstance);
 					exitSpawned = true;
 				}
 			}
@@ -368,26 +387,29 @@ public class MapMakerV7 : MonoBehaviour {
 			hullCheck();
 			hullChecked = true;
 		}
-
-		if(loopbreaker < 100 && Vector3.Distance(new Vector3(0,0,0), exitInstance.transform.position) < 30){
-			Debug.Log("Exit was too close");
-			Destroy(exitInstance);
-			GameObject newLocation;
-			newLocation = convexHullList[Random.Range(0,convexHullList.Count)];
-			int count = 0;
-			while( newLocation.name.StartsWith("Floor") && count < 100){
+		if (exitInstance != null){
+			if(loopbreaker < 100 && Vector3.Distance(new Vector3(0,0,0), exitInstance.transform.position) < 30){
+				Debug.Log("Exit was too close");
+				Destroy(exitInstance);
+				GameObject newLocation;
 				newLocation = convexHullList[Random.Range(0,convexHullList.Count)];
-				Debug.Log("In the loop");
-				count++;
-			}
-			exitInstance = Instantiate(exit, newLocation.transform.position, Quaternion.identity) as GameObject;
-			loopbreaker++;
-		} 
+				int count = 0;
+				while( newLocation.name.StartsWith("Floor") && count < 100){
+					newLocation = convexHullList[Random.Range(0,convexHullList.Count)];
+					Debug.Log("In the loop");
+					count++;
+				}
+				exitInstance = Instantiate(exit, newLocation.transform.position, Quaternion.identity) as GameObject;
+				loopbreaker++;
+			} 
+		}
 
-		if(Vector3.Distance(new Vector3(0,0,0), exitInstance.transform.position) > 30 && !exitCorrectPosition){
-			exitCorrectPosition = true;
-			
-		} 
+		if (exitInstance != null){
+			if(Vector3.Distance(new Vector3(0,0,0), exitInstance.transform.position) > 30 && !exitCorrectPosition){
+				exitCorrectPosition = true;
+				
+			} 
+		}
 
 	}	
 	
