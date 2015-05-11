@@ -57,6 +57,8 @@ public class ShowWorkbenchUpgrades : MonoBehaviour {
 	
 	}
 
+
+
 	public void DestroyUpgrades(){
 		foreach (Transform child in transform){
 			Destroy(child.gameObject);

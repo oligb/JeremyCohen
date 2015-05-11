@@ -5,8 +5,7 @@ public class TriggerUpgradePoint : MonoBehaviour {
 
 	// Use this for initialization
 	public int pointValue=1;
-	
-	public float speedInc=1f;
+
 	void Start () {
 	
 	}
