@@ -59,7 +59,7 @@ public class ClickableUpgrades : MonoBehaviour {
 	}
 
 	public void Enable(){
-
+		player.GetComponent<PlayerAttacks>().PlayBeepSound();
 		upgradeHighlightChild.enabled=true;
 		playerUpgrades.currentUpgrades.Add(actualUpgradeObject);
 		playerUpgrades.usedUpgradePoints+= actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost;
@@ -67,6 +67,7 @@ public class ClickableUpgrades : MonoBehaviour {
 	}
 	public void Disable(){
 		upgradeHighlightChild.enabled=false;
+		player.GetComponent<PlayerAttacks>().PlayBoopSound();
 		playerUpgrades.currentUpgrades.Remove(actualUpgradeObject);
 		playerUpgrades.usedUpgradePoints-= actualUpgradeObject.GetComponent<UpgradeStats>().upgradeCost;
 		playerUpgrades.UpdateTheStats();
@@ -112,6 +113,7 @@ public class ClickableUpgrades : MonoBehaviour {
 					}
 					else{
 						StartCoroutine("ShakeUpgrade");
+						player.GetComponent<PlayerAttacks>().PlayShakeSound();
 					}
 
 				}
