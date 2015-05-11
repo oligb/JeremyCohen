@@ -352,8 +352,7 @@ public class MapMakerV7 : MonoBehaviour {
 				}
 			}
 		}
-		
-		
+
 		roomNumber++;
 		
 	}
