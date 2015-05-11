@@ -13,6 +13,9 @@ public class LevelManager : MonoBehaviour {
 	public float numberOfEnemies = 0.08f;
 	public float pyramidBulletSpeed = 150;
 
+	public float maxXTiles = 10f;
+	public float maxYTiles = 10f;
+
 	public float armoredHealth = 10;
 	public float armoredSpeed = 5;
 
@@ -47,6 +50,9 @@ public class LevelManager : MonoBehaviour {
 
 		basicHealth = basicHealth + level;
 		basicSpeed = basicSpeed + basicSpeed / 10;
+
+		maxXTiles = maxXTiles + level * 2;
+		maxYTiles = maxYTiles + level * 2;
 
 		text.GetComponent<TextMesh>().text = "Level: " + level.ToString();
 

@@ -24,9 +24,9 @@ public class MapMakerV7 : MonoBehaviour {
 	public int maximumPathCount = 3;
 	public float pathmakerChance = 0.2f;
 	public float wallMakerChance = 0.1f;
-	public int maxXTiles = 10;
+	public float maxXTiles = 10f;
 	public int minXTiles = 5;
-	public int maxYTiles = 10;
+	public float maxYTiles = 10f;
 	public int minYTiles = 5;
 	public float enemySpawnChance = .08f;
 	public int maxEnemiesSpawned = 100;
@@ -76,10 +76,14 @@ public class MapMakerV7 : MonoBehaviour {
 	void Start () {
 
 
+
 		levelManager=GameObject.Find("LevelManager");
 		levelManager.GetComponent<LevelManager>().currentMapmaker = gameObject;
 
 		level = levelManager.GetComponent<LevelManager>().level;
+
+		maxXTiles = levelManager.GetComponent<LevelManager>().maxXTiles;
+		maxYTiles = levelManager.GetComponent<LevelManager>().maxYTiles;
 
 		wallTilesList.Add(walltile);
 		wallTilesList.Add(TripletWall);
@@ -186,6 +190,54 @@ public class MapMakerV7 : MonoBehaviour {
 			currentObject = Instantiate(floortile, tracer.transform.position + new Vector3(0,0,5), tracer.transform.rotation) as GameObject;
 			convexHullList.Add(currentObject);
 			currentPathLength++;
+
+			GameObject enemyTest;
+			if(randomNumber < enemySpawnChance){
+				if ( enemyCount < maxEnemiesSpawned ) {
+					float enemyRandomCount = Random.value;
+					if(level == 1){
+						enemyTest = Instantiate(basicEnemy,tracer.transform.position,Quaternion.identity) as GameObject;
+					} else if ( level == 2){
+						if(enemyRandomCount < 0.3){
+							enemyTest = Instantiate(pyramidEnemy,tracer.transform.position,Quaternion.identity) as GameObject;
+							
+							enemyTest.GetComponent<PyramidEnemyControl>().moveSpeed = levelManager.GetComponent<LevelManager>().pyramidSpeed;
+							enemyTest.GetComponent<PyramidEnemyControl>().numEnemyShots = levelManager.GetComponent<LevelManager>().pyramidNumOfBullets;
+							enemyTest.GetComponent<PyramidEnemyControl>().enemyBulletSpeed = levelManager.GetComponent<LevelManager>().pyramidBulletSpeed;
+							enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().pyramidHealth;
+						} else{
+							enemyTest = Instantiate(basicEnemy,tracer.transform.position,Quaternion.identity) as GameObject;
+						}
+					} else {
+						if(enemyRandomCount < 0.3){
+							enemyTest = Instantiate(pyramidEnemy,tracer.transform.position,Quaternion.identity) as GameObject;
+							
+							enemyTest.GetComponent<PyramidEnemyControl>().moveSpeed = levelManager.GetComponent<LevelManager>().pyramidSpeed;
+							enemyTest.GetComponent<PyramidEnemyControl>().numEnemyShots = levelManager.GetComponent<LevelManager>().pyramidNumOfBullets;
+							enemyTest.GetComponent<PyramidEnemyControl>().enemyBulletSpeed = levelManager.GetComponent<LevelManager>().pyramidBulletSpeed;
+							enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().pyramidHealth;
+						} else if ( enemyRandomCount < 0.5){
+							enemyTest = Instantiate(armoredEnemy,tracer.transform.position,Quaternion.identity) as GameObject;
+							
+							enemyTest.GetComponent<armoredEnemyController>().speed = levelManager.GetComponent<LevelManager>().armoredSpeed;
+							enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().armoredHealth;
+							
+							
+						} else{
+							enemyTest = Instantiate(basicEnemy,tracer.transform.position,Quaternion.identity) as GameObject;
+							
+							enemyTest.GetComponent<armoredEnemyController>().speed = levelManager.GetComponent<LevelManager>().basicSpeed;
+							enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().basicHealth;
+						}
+					}
+					
+					tempConvexHullList.Add(enemyTest);
+					
+					enemyTest.transform.Translate(Vector3.up*2);
+					enemyCount += 1;
+				}
+			}
+
 			
 			//turn block ensures the paths dont crash onthemselves.
 			if (randomNumber < 0.5f && turnBlock){
@@ -215,8 +267,8 @@ public class MapMakerV7 : MonoBehaviour {
 		int randomDirectionNumber;
 		List<int> pathDirectionList = new List<int>();;
 		
-		int verticalTileCount =  Random.Range(minYTiles,maxYTiles);
-		int horizontalTileCount = Random.Range(minXTiles,maxXTiles);
+		float verticalTileCount =  Random.Range(minYTiles,maxYTiles);
+		float horizontalTileCount = Random.Range(minXTiles,maxXTiles);
 		Vector3 position = Vector3.zero;
 		
 		Vector3 spawnerPosition = spawnGridPos;
@@ -325,9 +377,6 @@ public class MapMakerV7 : MonoBehaviour {
 									enemyTest.GetComponent<TakeDamage>().enemyHealth = levelManager.GetComponent<LevelManager>().basicHealth;
 								}
 							}
-
-
-
 
 							tempConvexHullList.Add(enemyTest);
 
