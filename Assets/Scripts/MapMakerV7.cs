@@ -395,8 +395,7 @@ public class MapMakerV7 : MonoBehaviour {
 				
 				if ( roomNumber == 0 && randomNumber < .2f && !exitSpawned){
 					//	Debug.Log("Exit instanciate should run.");
-					exitInstance = Instantiate(exit, position, Quaternion.identity) as GameObject;
-					tempConvexHullList.Add(exitInstance);
+					exitInstance = Instantiate(exit, position+Vector3.up, Quaternion.identity) as GameObject;
 					tempConvexHullList.Add(exitInstance);
 					exitSpawned = true;
 				}
