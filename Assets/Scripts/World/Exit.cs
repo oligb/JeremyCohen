@@ -5,9 +5,11 @@ public class Exit : MonoBehaviour {
 
 	public GameObject mapMaker, levelManager;
 	public SfxrSynth teleportSynth;
+	public GameObject tutorialText;
 
 	// Use this for initialization
 	void Start () {
+		tutorialText=GameObject.Find ("tutorialtext");
 		mapMaker = GameObject.Find("MapMakerV7(Clone)");
 		levelManager = GameObject.Find("LevelManager");
 	}
@@ -21,6 +23,9 @@ public class Exit : MonoBehaviour {
 
 
 		if(col.gameObject.tag == "Player"){
+			if(tutorialText!=null){
+				Destroy(tutorialText.gameObject);
+			}
 			levelManager.GetComponent<LevelManager>().level++;
 			levelManager.GetComponent<LevelManager>().IncreaseDifficulty();
 

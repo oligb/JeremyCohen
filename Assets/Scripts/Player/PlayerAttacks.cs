@@ -61,13 +61,14 @@ public class PlayerAttacks : MonoBehaviour {
 
 
 	public void PlayShotSound(){
+	
 		if (shotSynth == null) {
 			shotSynth = new SfxrSynth();
 			shotSynth.parameters.SetSettingsString("3,.223,,,,.1814,.456,.215,,-.286,-.132,.767,.523,.812,.975,.0487,,,.0397,,,.0469,,-.0094,,.751,-.321,.0016,.256,.03,,");
 			shotSynth.SetParentTransform(Camera.main.transform);
 
 		float ti = Time.realtimeSinceStartup;
-			shotSynth.CacheMutations(15, 0.05f);
+			shotSynth.CacheMutations(15, 0.03f);
 	}
 
 		shotSynth.PlayMutated();
@@ -80,7 +81,7 @@ public class PlayerAttacks : MonoBehaviour {
 			hitSynth.SetParentTransform(Camera.main.transform);
 			
 			float ti = Time.realtimeSinceStartup;
-			hitSynth.CacheMutations(15, 0.06f);
+			hitSynth.CacheMutations(15, 0.03f);
 		}
 		
 		hitSynth.PlayMutated();
@@ -95,7 +96,7 @@ public class PlayerAttacks : MonoBehaviour {
 		pickupSynth.parameters.SetSettingsString("1,.05,,.2835,,.3565,.3,.2078,,.3427,,,,,,,,,,,,,.5043,,,1,,,,,,");
 			pickupSynth.SetParentTransform(Camera.main.transform);
 			float ti = Time.realtimeSinceStartup;
-			pickupSynth.CacheMutations(15, 0.08f);
+			pickupSynth.CacheMutations(15, 0.03f);
 		}
 
 		pickupSynth.PlayMutated();
